@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BERU — لوحة التحكم</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --berry: #C4607A;
+    --velvet: #7B3FA0;
+    --luxurious: #5A8C5C;
+    --gold: #C9A84C;
+    --bg: #0f0e0e;
+    --surface: #1a1818;
+    --surface2: #232020;
+    --border: rgba(255,255,255,0.07);
+    --text: #f0ebe8;
+    --text-muted: #7a7370;
+    --green: #4caf7d;
+    --red: #e05c6a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    direction: rtl;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 6px;
+    background: linear-gradient(135deg, #f0ebe8, var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header-date {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 32px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .tab {
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab.active {
+    background: var(--berry);
+    color: white;
+  }
+
+  .tab:hover:not(.active) {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  /* MAIN */
+  .main { padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
+
+  /* SECTION */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: 0 16px 16px 0;
+  }
+
+  .stat-card.berry::before { background: var(--berry); }
+  .stat-card.velvet::before { background: var(--velvet); }
+  .stat-card.luxurious::before { background: var(--luxurious); }
+  .stat-card.gold::before { background: var(--gold); }
+  .stat-card.green::before { background: var(--green); }
+  .stat-card.red::before { background: var(--red); }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .stat-value.green { color: var(--green); }
+  .stat-value.red { color: var(--red); }
+  .stat-value.gold { color: var(--gold); }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title span { color: var(--text-muted); font-size: 13px; font-weight: 400; }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th {
+    text-align: right;
+    padding: 10px 14px;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* BADGE */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .badge.berry { background: rgba(196,96,122,0.2); color: var(--berry); }
+  .badge.velvet { background: rgba(123,63,160,0.2); color: #b57bec; }
+  .badge.luxurious { background: rgba(90,140,92,0.2); color: #7ec880; }
+  .badge.sample { background: rgba(201,168,76,0.2); color: var(--gold); }
+  .badge.delivered { background: rgba(76,175,125,0.2); color: var(--green); }
+  .badge.pending { background: rgba(255,180,50,0.2); color: #ffb432; }
+
+  /* FORM */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  input, select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+    direction: rtl;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--berry);
+  }
+
+  select option { background: var(--surface2); }
+
+  /* BUTTONS */
+  .btn {
+    padding: 10px 24px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary { background: var(--berry); color: white; }
+  .btn-primary:hover { background: #b54d6a; transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--surface2); color: var(--text); }
+  .btn-danger { background: rgba(224,92,106,0.15); color: var(--red); border: 1px solid rgba(224,92,106,0.3); }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+  }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* SCENT ROW */
+  .scent-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .scent-row:last-child { border-bottom: none; }
+
+  .scent-name {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .scent-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* PROFIT INDICATOR */
+  .profit-pill {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .profit-pill.positive { background: rgba(76,175,125,0.15); color: var(--green); }
+  .profit-pill.negative { background: rgba(224,92,106,0.15); color: var(--red); }
+
+  /* ALERT */
+  .alert {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .alert.warning { background: rgba(255,180,50,0.1); border: 1px solid rgba(255,180,50,0.2); color: #ffb432; }
+  .alert.success { background: rgba(76,175,125,0.1); border: 1px solid rgba(76,175,125,0.2); color: var(--green); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* EMPTY STATE */
+  .empty { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">BERU</div>
+  <div class="header-date" id="currentDate"></div>
+</div>
+
+<div class="nav-tabs">
+  <button class="tab active" onclick="switchTab('overview')">📊 نظرة عامة</button>
+  <button class="tab" onclick="switchTab('orders')">📦 الطلبات</button>
+  <button class="tab" onclick="switchTab('inventory')">🧪 المخزون</button>
+  <button class="tab" onclick="switchTab('finance')">💰 الحسابات</button>
+  <button class="tab" onclick="switchTab('expenses')">💸 المصاريف</button>
+</div>
+
+<div class="main">
+
+  <!-- ===== OVERVIEW ===== -->
+  <div class="section active" id="section-overview">
+
+    <div id="low-stock-alert"></div>
+
+    <div class="stats-grid">
+      <div class="stat-card green">
+        <div class="stat-label">إجمالي الإيرادات</div>
+        <div class="stat-value green" id="totalRevenue">0</div>
+        <div class="stat-sub">جنيه مصري</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-label">إجمالي المصاريف</div>
+        <div class="stat-value red" id="totalExpenses">0</div>
+        <div class="stat-sub">جنيه مصري</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-label">صافي الربح</div>
+        <div class="stat-value gold" id="netProfit">0</div>
+        <div class="stat-sub">جنيه مصري</div>
+      </div>
+      <div class="stat-card berry">
+        <div class="stat-label">طلبات منجزة</div>
+        <div class="stat-value" id="totalOrders">0</div>
+        <div class="stat-sub">طلب</div>
+      </div>
+      <div class="stat-card velvet">
+        <div class="stat-label">طلبات معلقة</div>
+        <div class="stat-value" id="pendingOrders">0</div>
+        <div class="stat-sub">طلب</div>
+      </div>
+      <div class="stat-card luxurious">
+        <div class="stat-label">السيولة المتاحة</div>
+        <div class="stat-value" id="liquidity">2000</div>
+        <div class="stat-sub">جنيه مصري</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">مبيعات حسب الريحة</div>
+        <div id="scentSales">
+          <div class="scent-row">
+            <div>
+              <div class="scent-name" style="color: var(--berry)">Berry 🍓</div>
+              <div class="scent-meta" id="berrySales">0 عبوة — 0 جنيه</div>
+            </div>
+            <div>
+              <div class="progress-bar" style="width:120px">
+                <div class="progress-fill" id="berryBar" style="background:var(--berry);width:0%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="scent-row">
+            <div>
+              <div class="scent-name" style="color: #b57bec">Velvet 💜</div>
+              <div class="scent-meta" id="velvetSales">0 عبوة — 0 جنيه</div>
+            </div>
+            <div>
+              <div class="progress-bar" style="width:120px">
+                <div class="progress-fill" id="velvetBar" style="background:var(--velvet);width:0%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="scent-row">
+            <div>
+              <div class="scent-name" style="color: #7ec880">Luxurious 🌿</div>
+              <div class="scent-meta" id="luxSales">0 عبوة — 0 جنيه</div>
+            </div>
+            <div>
+              <div class="progress-bar" style="width:120px">
+                <div class="progress-fill" id="luxBar" style="background:var(--luxurious);width:0%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="scent-row">
+            <div>
+              <div class="scent-name" style="color: var(--gold)">باكدج تجربة ✦</div>
+              <div class="scent-meta" id="sampleSales">0 باكدج — 0 جنيه</div>
+            </div>
+            <div>
+              <div class="progress-bar" style="width:120px">
+                <div class="progress-fill" id="sampleBar" style="background:var(--gold);width:0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">ملخص المخزون</div>
+        <div id="inventoryOverview">
+          <div class="scent-row">
+            <div>
+              <div class="scent-name">البوتلات الفاضية</div>
+              <div class="scent-meta" id="invBottles">— عبوة</div>
+            </div>
+            <span class="badge berry" id="invBottlesBadge">—</span>
+          </div>
+          <div class="scent-row">
+            <div>
+              <div class="scent-name">الأقلام العطرية</div>
+              <div class="scent-meta" id="invPens">— قلم</div>
+            </div>
+            <span class="badge sample" id="invPensBadge">—</span>
+          </div>
+          <div class="scent-row">
+            <div>
+              <div class="scent-name">الاستيكرز</div>
+              <div class="scent-meta" id="invStickers">— استيكر</div>
+            </div>
+            <span class="badge luxurious" id="invStickersBadge">—</span>
+          </div>
+          <div class="scent-row">
+            <div>
+              <div class="scent-name">الكحول (لتر)</div>
+              <div class="scent-meta" id="invAlcohol">— لتر</div>
+            </div>
+            <span class="badge velvet" id="invAlcoholBadge">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">آخر الطلبات <span id="lastOrdersCount"></span></div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>الزبون</th>
+            <th>المنتج</th>
+            <th>السعر</th>
+            <th>الحالة</th>
+            <th>التاريخ</th>
+          </tr>
+        </thead>
+        <tbody id="recentOrdersTable">
+          <tr><td colspan="6" class="empty">لا يوجد طلبات بعد</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== ORDERS ===== -->
+  <div class="section" id="section-orders">
+    <div class="card">
+      <div class="card-title">إضافة طلب جديد</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>اسم الزبون</label>
+          <input type="text" id="orderName" placeholder="اسم الزبون">
+        </div>
+        <div class="form-group">
+          <label>المنتج</label>
+          <select id="orderProduct">
+            <option value="berry">Berry — بودي سبلاش</option>
+            <option value="velvet">Velvet — بودي سبلاش</option>
+            <option value="luxurious">Luxurious — بودي سبلاش</option>
+            <option value="sample">باكدج تجربة (3 أقلام)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>الكمية</label>
+          <input type="number" id="orderQty" placeholder="1" min="1" value="1">
+        </div>
+        <div class="form-group">
+          <label>السعر الإجمالي (جنيه)</label>
+          <input type="number" id="orderPrice" placeholder="170">
+        </div>
+        <div class="form-group">
+          <label>طريقة التواصل</label>
+          <select id="orderSource">
+            <option value="instagram">Instagram</option>
+            <option value="facebook">Facebook</option>
+            <option value="whatsapp">واتساب</option>
+            <option value="direct">مباشر</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>الحالة</label>
+          <select id="orderStatus">
+            <option value="pending">معلق</option>
+            <option value="delivered">تم التسليم</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px">
+        <label>ملاحظات</label>
+        <input type="text" id="orderNotes" placeholder="أي ملاحظات...">
+      </div>
+      <button class="btn btn-primary" onclick="addOrder()">✦ إضافة الطلب</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">كل الطلبات <span id="allOrdersCount"></span></div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>الزبون</th>
+            <th>المنتج</th>
+            <th>الكمية</th>
+            <th>السعر</th>
+            <th>المصدر</th>
+            <th>الحالة</th>
+            <th>التاريخ</th>
+            <th>حذف</th>
+          </tr>
+        </thead>
+        <tbody id="allOrdersTable">
+          <tr><td colspan="9" class="empty">لا يوجد طلبات بعد</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== INVENTORY ===== -->
+  <div class="section" id="section-inventory">
+    <div class="card">
+      <div class="card-title">تحديث المخزون</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>البوتلات الفاضية (عبوة)</label>
+          <input type="number" id="invBottlesInput" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>الأقلام العطرية (قلم)</label>
+          <input type="number" id="invPensInput" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>الاستيكرز (قطعة)</label>
+          <input type="number" id="invStickersInput" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>الكحول (لتر)</label>
+          <input type="number" id="invAlcoholInput" placeholder="0" step="0.1">
+        </div>
+        <div class="form-group">
+          <label>زيوت عطرية Berry (مل)</label>
+          <input type="number" id="invBerryOil" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>زيوت عطرية Velvet (مل)</label>
+          <input type="number" id="invVelvetOil" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>زيوت عطرية Luxurious (مل)</label>
+          <input type="number" id="invLuxOil" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>مذيبات / مواد حافظة (مل)</label>
+          <input type="number" id="invPreservatives" placeholder="0">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="saveInventory()">✦ حفظ المخزون</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">الطاقة الإنتاجية المتاحة</div>
+      <div id="productionCapacity">
+        <div class="scent-row">
+          <div>
+            <div class="scent-name">بودي سبلاش (240ml)</div>
+            <div class="scent-meta">حسب البوتلات والكحول والزيوت المتاحة</div>
+          </div>
+          <div class="stat-value" id="canProduceSplash" style="font-size:24px">—</div>
+        </div>
+        <div class="scent-row">
+          <div>
+            <div class="scent-name">باكدج تجربة (3 أقلام)</div>
+            <div class="scent-meta">حسب الأقلام المتاحة</div>
+          </div>
+          <div class="stat-value" id="canProduceSample" style="font-size:24px">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FINANCE ===== -->
+  <div class="section" id="section-finance">
+    <div class="stats-grid">
+      <div class="stat-card green">
+        <div class="stat-label">إجمالي الإيرادات</div>
+        <div class="stat-value green" id="finRevenue">0</div>
+        <div class="stat-sub">جنيه</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-label">تكلفة المبيعات</div>
+        <div class="stat-value red" id="finCOGS">0</div>
+        <div class="stat-sub">جنيه</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-label">هامش الربح الإجمالي</div>
+        <div class="stat-value gold" id="finGrossMargin">0%</div>
+        <div class="stat-sub">Gross Margin</div>
+      </div>
+      <div class="stat-card berry">
+        <div class="stat-label">المصاريف التشغيلية</div>
+        <div class="stat-value" id="finOpex">0</div>
+        <div class="stat-sub">جنيه</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">صافي الربح</div>
+        <div class="stat-value green" id="finNet">0</div>
+        <div class="stat-sub">جنيه</div>
+      </div>
+      <div class="stat-card luxurious">
+        <div class="stat-label">العائد على الاستثمار</div>
+        <div class="stat-value" id="finROI" style="color:var(--green)">0%</div>
+        <div class="stat-sub">ROI</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">ربحية كل منتج</div>
+        <div class="scent-row">
+          <div>
+            <div class="scent-name" style="color:var(--berry)">Berry — بودي سبلاش</div>
+            <div class="scent-meta">سعر البيع: 170 جنيه | التكلفة: 90 جنيه</div>
+          </div>
+          <span class="profit-pill positive">+80 جنيه</span>
+        </div>
+        <div class="scent-row">
+          <div>
+            <div class="scent-name" style="color:#b57bec">Velvet — بودي سبلاش</div>
+            <div class="scent-meta">سعر البيع: 170 جنيه | التكلفة: 90 جنيه</div>
+          </div>
+          <span class="profit-pill positive">+80 جنيه</span>
+        </div>
+        <div class="scent-row">
+          <div>
+            <div class="scent-name" style="color:#7ec880">Luxurious — بودي سبلاش</div>
+            <div class="scent-meta">سعر البيع: 170 جنيه | التكلفة: 90 جنيه</div>
+          </div>
+          <span class="profit-pill positive">+80 جنيه</span>
+        </div>
+        <div class="scent-row">
+          <div>
+            <div class="scent-name" style="color:var(--gold)">باكدج تجربة (3 أقلام)</div>
+            <div class="scent-meta">سعر البيع: 80 جنيه | التكلفة: 45 جنيه</div>
+          </div>
+          <span class="profit-pill positive">+35 جنيه</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">السيولة والتدفق النقدي</div>
+        <div class="scent-row">
+          <div class="scent-name">السيولة الابتدائية</div>
+          <div style="font-weight:700">2,000 جنيه</div>
+        </div>
+        <div class="scent-row">
+          <div class="scent-name">إجمالي الإيرادات</div>
+          <div style="font-weight:700;color:var(--green)" id="cashRevenue">+0</div>
+        </div>
+        <div class="scent-row">
+          <div class="scent-name">إجمالي المصاريف</div>
+          <div style="font-weight:700;color:var(--red)" id="cashExpenses">-0</div>
+        </div>
+        <div class="divider"></div>
+        <div class="scent-row">
+          <div class="scent-name" style="font-size:16px;font-weight:900">السيولة الحالية</div>
+          <div style="font-weight:900;font-size:20px;color:var(--gold)" id="cashCurrent">2,000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== EXPENSES ===== -->
+  <div class="section" id="section-expenses">
+    <div class="card">
+      <div class="card-title">إضافة مصروف</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>البند</label>
+          <input type="text" id="expName" placeholder="مثال: خامات Berry">
+        </div>
+        <div class="form-group">
+          <label>التصنيف</label>
+          <select id="expCategory">
+            <option value="raw">خامات (Raw Material)</option>
+            <option value="packaging">تغليف واستيكرز</option>
+            <option value="shipping">شحن وتوصيل</option>
+            <option value="marketing">تسويق</option>
+            <option value="other">أخرى</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>المبلغ (جنيه)</label>
+          <input type="number" id="expAmount" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>التاريخ</label>
+          <input type="date" id="expDate">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px">
+        <label>ملاحظات</label>
+        <input type="text" id="expNotes" placeholder="تفاصيل إضافية...">
+      </div>
+      <button class="btn btn-primary" onclick="addExpense()">✦ إضافة المصروف</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">كل المصاريف <span id="expensesTotal"></span></div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>البند</th>
+            <th>التصنيف</th>
+            <th>المبلغ</th>
+            <th>التاريخ</th>
+            <th>ملاحظات</th>
+            <th>حذف</th>
+          </tr>
+        </thead>
+        <tbody id="expensesTable">
+          <tr><td colspan="7" class="empty">لا يوجد مصاريف بعد</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== STATE =====
+let state = {
+  orders: [],
+  expenses: [],
+  inventory: {
+    bottles: 0, pens: 0, stickers: 0, alcohol: 0,
+    berryOil: 0, velvetOil: 0, luxOil: 0, preservatives: 0
+  }
+};
+
+const PRICES = { berry: 170, velvet: 170, luxurious: 170, sample: 80 };
+const COSTS  = { berry: 90,  velvet: 90,  luxurious: 90,  sample: 45 };
+
+const PRODUCT_LABELS = {
+  berry: 'Berry 🍓', velvet: 'Velvet 💜',
+  luxurious: 'Luxurious 🌿', sample: 'باكدج تجربة ✦'
+};
+
+const CAT_LABELS = {
+  raw: 'خامات', packaging: 'تغليف', shipping: 'شحن',
+  marketing: 'تسويق', other: 'أخرى'
+};
+
+// ===== STORAGE =====
+function save() { localStorage.setItem('beru_v1', JSON.stringify(state)); }
+function load() {
+  const d = localStorage.getItem('beru_v1');
+  if (d) state = JSON.parse(d);
+}
+
+// ===== TABS =====
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('section-' + tab).classList.add('active');
+  render();
+}
+
+// ===== ADD ORDER =====
+function addOrder() {
+  const name = document.getElementById('orderName').value.trim();
+  const product = document.getElementById('orderProduct').value;
+  const qty = parseInt(document.getElementById('orderQty').value) || 1;
+  const price = parseFloat(document.getElementById('orderPrice').value) || PRICES[product] * qty;
+  const source = document.getElementById('orderSource').value;
+  const status = document.getElementById('orderStatus').value;
+  const notes = document.getElementById('orderNotes').value.trim();
+
+  if (!name) { alert('اكتب اسم الزبون'); return; }
+
+  state.orders.push({
+    id: Date.now(), name, product, qty, price, source, status, notes,
+    date: new Date().toLocaleDateString('ar-EG')
+  });
+
+  save(); render();
+  document.getElementById('orderName').value = '';
+  document.getElementById('orderNotes').value = '';
+  document.getElementById('orderQty').value = '1';
+  document.getElementById('orderPrice').value = '';
+}
+
+// ===== DELETE ORDER =====
+function deleteOrder(id) {
+  state.orders = state.orders.filter(o => o.id !== id);
+  save(); render();
+}
+
+// ===== ADD EXPENSE =====
+function addExpense() {
+  const name = document.getElementById('expName').value.trim();
+  const category = document.getElementById('expCategory').value;
+  const amount = parseFloat(document.getElementById('expAmount').value) || 0;
+  const date = document.getElementById('expDate').value || new Date().toLocaleDateString('ar-EG');
+  const notes = document.getElementById('expNotes').value.trim();
+
+  if (!name || !amount) { alert('اكتب البند والمبلغ'); return; }
+
+  state.expenses.push({ id: Date.now(), name, category, amount, date, notes });
+  save(); render();
+
+  document.getElementById('expName').value = '';
+  document.getElementById('expAmount').value = '';
+  document.getElementById('expNotes').value = '';
+}
+
+// ===== DELETE EXPENSE =====
+function deleteExpense(id) {
+  state.expenses = state.expenses.filter(e => e.id !== id);
+  save(); render();
+}
+
+// ===== SAVE INVENTORY =====
+function saveInventory() {
+  state.inventory.bottles      = parseFloat(document.getElementById('invBottlesInput').value) || 0;
+  state.inventory.pens         = parseFloat(document.getElementById('invPensInput').value) || 0;
+  state.inventory.stickers     = parseFloat(document.getElementById('invStickersInput').value) || 0;
+  state.inventory.alcohol      = parseFloat(document.getElementById('invAlcoholInput').value) || 0;
+  state.inventory.berryOil     = parseFloat(document.getElementById('invBerryOil').value) || 0;
+  state.inventory.velvetOil    = parseFloat(document.getElementById('invVelvetOil').value) || 0;
+  state.inventory.luxOil       = parseFloat(document.getElementById('invLuxOil').value) || 0;
+  state.inventory.preservatives= parseFloat(document.getElementById('invPreservatives').value) || 0;
+  save(); render();
+  alert('✅ تم حفظ المخزون');
+}
+
+// ===== CALCULATIONS =====
+function calcStats() {
+  const deliveredOrders = state.orders.filter(o => o.status === 'delivered');
+  const pendingOrders   = state.orders.filter(o => o.status === 'pending');
+
+  const revenue  = deliveredOrders.reduce((s, o) => s + o.price, 0);
+  const cogs     = deliveredOrders.reduce((s, o) => s + (COSTS[o.product] * o.qty), 0);
+  const opex     = state.expenses.reduce((s, e) => s + e.amount, 0);
+  const netProfit = revenue - cogs - opex;
+  const grossMargin = revenue > 0 ? ((revenue - cogs) / revenue * 100).toFixed(1) : 0;
+  const roi = opex + 2000 > 0 ? (netProfit / (opex + 2000) * 100).toFixed(1) : 0;
+
+  const scentCount = { berry: 0, velvet: 0, luxurious: 0, sample: 0 };
+  const scentRev   = { berry: 0, velvet: 0, luxurious: 0, sample: 0 };
+  deliveredOrders.forEach(o => {
+    scentCount[o.product] = (scentCount[o.product] || 0) + o.qty;
+    scentRev[o.product]   = (scentRev[o.product] || 0) + o.price;
+  });
+
+  const maxRev = Math.max(...Object.values(scentRev), 1);
+
+  return {
+    revenue, cogs, opex, netProfit, grossMargin, roi,
+    totalOrders: deliveredOrders.length,
+    pendingCount: pendingOrders.length,
+    liquidity: 2000 + revenue - opex,
+    scentCount, scentRev, maxRev
+  };
+}
+
+// ===== RENDER =====
+function render() {
+  const s = calcStats();
+
+  // Date
+  document.getElementById('currentDate').textContent =
+    new Date().toLocaleDateString('ar-EG', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  // Overview stats
+  document.getElementById('totalRevenue').textContent  = s.revenue.toLocaleString();
+  document.getElementById('totalExpenses').textContent = s.opex.toLocaleString();
+  document.getElementById('netProfit').textContent     = s.netProfit.toLocaleString();
+  document.getElementById('totalOrders').textContent   = s.totalOrders;
+  document.getElementById('pendingOrders').textContent = s.pendingCount;
+  document.getElementById('liquidity').textContent     = s.liquidity.toLocaleString();
+
+  // Scent sales
+  document.getElementById('berrySales').textContent  = `${s.scentCount.berry} عبوة — ${s.scentRev.berry} جنيه`;
+  document.getElementById('velvetSales').textContent = `${s.scentCount.velvet} عبوة — ${s.scentRev.velvet} جنيه`;
+  document.getElementById('luxSales').textContent    = `${s.scentCount.luxurious} عبوة — ${s.scentRev.luxurious} جنيه`;
+  document.getElementById('sampleSales').textContent = `${s.scentCount.sample} باكدج — ${s.scentRev.sample} جنيه`;
+
+  document.getElementById('berryBar').style.width  = (s.scentRev.berry / s.maxRev * 100) + '%';
+  document.getElementById('velvetBar').style.width = (s.scentRev.velvet / s.maxRev * 100) + '%';
+  document.getElementById('luxBar').style.width    = (s.scentRev.luxurious / s.maxRev * 100) + '%';
+  document.getElementById('sampleBar').style.width = (s.scentRev.sample / s.maxRev * 100) + '%';
+
+  // Inventory overview
+  const inv = state.inventory;
+  document.getElementById('invBottles').textContent      = inv.bottles + ' عبوة';
+  document.getElementById('invPens').textContent         = inv.pens + ' قلم';
+  document.getElementById('invStickers').textContent     = inv.stickers + ' استيكر';
+  document.getElementById('invAlcohol').textContent      = inv.alcohol + ' لتر';
+  document.getElementById('invBottlesBadge').textContent = inv.bottles <= 10 ? '⚠️ منخفض' : '✅ كافي';
+  document.getElementById('invPensBadge').textContent    = inv.pens <= 15 ? '⚠️ منخفض' : '✅ كافي';
+  document.getElementById('invStickersBadge').textContent= inv.stickers <= 15 ? '⚠️ منخفض' : '✅ كافي';
+  document.getElementById('invAlcoholBadge').textContent = inv.alcohol <= 2 ? '⚠️ منخفض' : '✅ كافي';
+
+  // Low stock alert
+  const alerts = [];
+  if (inv.bottles <= 10)  alerts.push('البوتلات الفاضية');
+  if (inv.pens <= 15)     alerts.push('الأقلام العطرية');
+  if (inv.stickers <= 15) alerts.push('الاستيكرز');
+  if (inv.alcohol <= 2)   alerts.push('الكحول');
+  document.getElementById('low-stock-alert').innerHTML = alerts.length
+    ? `<div class="alert warning">⚠️ مخزون منخفض: ${alerts.join(' — ')}</div>`
+    : '';
+
+  // Production capacity
+  const canSplash = Math.min(inv.bottles, Math.floor(inv.alcohol / 0.24));
+  const canSample = Math.floor(inv.pens / 3);
+  document.getElementById('canProduceSplash').textContent = canSplash + ' عبوة';
+  document.getElementById('canProduceSample').textContent = canSample + ' باكدج';
+
+  // Fill inventory inputs
+  document.getElementById('invBottlesInput').value      = inv.bottles || '';
+  document.getElementById('invPensInput').value         = inv.pens || '';
+  document.getElementById('invStickersInput').value     = inv.stickers || '';
+  document.getElementById('invAlcoholInput').value      = inv.alcohol || '';
+  document.getElementById('invBerryOil').value          = inv.berryOil || '';
+  document.getElementById('invVelvetOil').value         = inv.velvetOil || '';
+  document.getElementById('invLuxOil').value            = inv.luxOil || '';
+  document.getElementById('invPreservatives').value     = inv.preservatives || '';
+
+  // Finance
+  document.getElementById('finRevenue').textContent     = s.revenue.toLocaleString();
+  document.getElementById('finCOGS').textContent        = s.cogs.toLocaleString();
+  document.getElementById('finGrossMargin').textContent = s.grossMargin + '%';
+  document.getElementById('finOpex').textContent        = s.opex.toLocaleString();
+  document.getElementById('finNet').textContent         = s.netProfit.toLocaleString();
+  document.getElementById('finNet').className           = 'stat-value ' + (s.netProfit >= 0 ? 'green' : 'red');
+  document.getElementById('finROI').textContent         = s.roi + '%';
+  document.getElementById('cashRevenue').textContent    = '+' + s.revenue.toLocaleString();
+  document.getElementById('cashExpenses').textContent   = '-' + s.opex.toLocaleString();
+  document.getElementById('cashCurrent').textContent    = s.liquidity.toLocaleString();
+
+  // Recent orders table (overview)
+  const recent = [...state.orders].reverse().slice(0, 5);
+  const recentTbl = document.getElementById('recentOrdersTable');
+  document.getElementById('lastOrdersCount').textContent = state.orders.length ? `(${state.orders.length})` : '';
+  recentTbl.innerHTML = recent.length ? recent.map((o, i) => `
+    <tr>
+      <td style="color:var(--text-muted)">${i + 1}</td>
+      <td style="font-weight:600">${o.name}</td>
+      <td><span class="badge ${o.product}">${PRODUCT_LABELS[o.product]}</span></td>
+      <td style="color:var(--green);font-weight:700">${o.price} ج</td>
+      <td><span class="badge ${o.status === 'delivered' ? 'delivered' : 'pending'}">${o.status === 'delivered' ? 'تم التسليم' : 'معلق'}</span></td>
+      <td style="color:var(--text-muted)">${o.date}</td>
+    </tr>`).join('') : '<tr><td colspan="6" class="empty">لا يوجد طلبات بعد</td></tr>';
+
+  // All orders table
+  const allTbl = document.getElementById('allOrdersTable');
+  document.getElementById('allOrdersCount').textContent = state.orders.length ? `(${state.orders.length})` : '';
+  allTbl.innerHTML = state.orders.length ? [...state.orders].reverse().map((o, i) => `
+    <tr>
+      <td style="color:var(--text-muted)">${i + 1}</td>
+      <td style="font-weight:600">${o.name}</td>
+      <td><span class="badge ${o.product}">${PRODUCT_LABELS[o.product]}</span></td>
+      <td>${o.qty}</td>
+      <td style="color:var(--green);font-weight:700">${o.price} ج</td>
+      <td style="color:var(--text-muted)">${o.source}</td>
+      <td><span class="badge ${o.status === 'delivered' ? 'delivered' : 'pending'}">${o.status === 'delivered' ? 'تم التسليم' : 'معلق'}</span></td>
+      <td style="color:var(--text-muted)">${o.date}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteOrder(${o.id})">حذف</button></td>
+    </tr>`).join('') : '<tr><td colspan="9" class="empty">لا يوجد طلبات بعد</td></tr>';
+
+  // Expenses table
+  const expTbl = document.getElementById('expensesTable');
+  const totalExp = state.expenses.reduce((s, e) => s + e.amount, 0);
+  document.getElementById('expensesTotal').textContent = state.expenses.length ? `إجمالي: ${totalExp.toLocaleString()} جنيه` : '';
+  expTbl.innerHTML = state.expenses.length ? [...state.expenses].reverse().map((e, i) => `
+    <tr>
+      <td style="color:var(--text-muted)">${i + 1}</td>
+      <td style="font-weight:600">${e.name}</td>
+      <td><span class="badge sample">${CAT_LABELS[e.category]}</span></td>
+      <td style="color:var(--red);font-weight:700">${e.amount} ج</td>
+      <td style="color:var(--text-muted)">${e.date}</td>
+      <td style="color:var(--text-muted)">${e.notes || '—'}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteExpense(${e.id})">حذف</button></td>
+    </tr>`).join('') : '<tr><td colspan="7" class="empty">لا يوجد مصاريف بعد</td></tr>';
+
+  // Auto-fill order price
+  document.getElementById('orderProduct').onchange = function() {
+    const p = this.value;
+    const qty = parseInt(document.getElementById('orderQty').value) || 1;
+    document.getElementById('orderPrice').value = PRICES[p] * qty;
+  };
+  document.getElementById('orderQty').oninput = function() {
+    const p = document.getElementById('orderProduct').value;
+    document.getElementById('orderPrice').value = PRICES[p] * (parseInt(this.value) || 1);
+  };
+}
+
+// ===== INIT =====
+load();
+render();
+</script>
+</body>
+</html>
