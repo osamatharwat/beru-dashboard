@@ -722,15 +722,15 @@ tr:last-child td { border-bottom: none; }
     <div class="form-grid" style="margin-bottom:20px;">
       <div class="form-group">
         <label>حجم الدفعة (مل)</label>
-        <input type="number" id="batch-size" value="1000" min="100" step="100" oninput="calcBatchCost()">
+        <input type="number" id="batch-size" value="1000" min="100" step="100" oninput="renderIngredients()">
       </div>
       <div class="form-group">
         <label>حجم الزجاجة الواحدة (مل)</label>
-        <input type="number" id="bottle-size" value="100" min="10" step="10" oninput="calcBatchCost()">
+        <input type="number" id="bottle-size" value="100" min="10" step="10" oninput="updateTotalsOnly()">
       </div>
       <div class="form-group">
         <label>سعر البيع للزجاجة (جنيه)</label>
-        <input type="number" id="selling-price" value="0" min="0" step="5" oninput="calcBatchCost()">
+        <input type="number" id="selling-price" value="0" min="0" step="5" oninput="updateTotalsOnly()">
       </div>
     </div>
 
@@ -1233,22 +1233,23 @@ function calcUnitCostFromFormula(bottleMl) {
 }
 
 function renderIngredients() {
+  // بنرسم الجدول مرة واحدة بس — من غير ما نستدعي calcBatchCost هنا
   const batchSize = parseFloat(document.getElementById('batch-size').value) || 1000;
-  const bottleSize = parseFloat(document.getElementById('bottle-size').value) || 100;
 
-  const tbody = FORMULA.map((ing, i) => {
+  const roleColors = {
+    'active ingredient': '#e91e8c',
+    'surfactant': '#3498db',
+    'humectant': '#2ecc71',
+    'antibacterial': '#e74c3c',
+    'antifungal': '#9b59b6',
+    'filler': 'var(--green)',
+    'colour': '#e67e22'
+  };
+
+  const tbody = FORMULA.map((ing) => {
     const amountMl = (ing.pct / 100) * batchSize;
     const costPerMl = parseFloat(ingredientCosts[ing.costKey] || 0);
     const totalCost = amountMl * costPerMl;
-    const roleColors = {
-      'active ingredient': '#e91e8c',
-      'surfactant': '#3498db',
-      'humectant': '#2ecc71',
-      'antibacterial': '#e74c3c',
-      'antifungal': '#9b59b6',
-      'filler': 'var(--green)',
-      'colour': '#e67e22'
-    };
     const roleColor = roleColors[ing.role] || '#666';
     return `
       <div class="ingredient-row">
@@ -1258,25 +1259,37 @@ function renderIngredients() {
         <div style="display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;color:white;background:${roleColor};width:120px;text-align:center;">${ing.role}</div>
         <div class="ingredient-cost">
           <label style="font-size:11px;color:var(--text-muted);white-space:nowrap;">جنيه/مل:</label>
-          <input type="number" style="width:85px;" value="${ingredientCosts[ing.costKey] || ''}" 
+          <input type="number" style="width:85px;" value="${ingredientCosts[ing.costKey] || ''}"
                  placeholder="0.000" step="0.001" min="0"
                  onchange="updateIngCost('${ing.costKey}', this.value)">
         </div>
-        <div class="cost-badge">${fmt(totalCost)} ج</div>
+        <div class="cost-badge" id="cost-badge-${ing.costKey}">${fmt(totalCost)} ج</div>
       </div>`;
   }).join('');
 
-  document.getElementById('ingredientsTable').innerHTML = `<div style="background:var(--off-white);border-radius:12px;padding:16px;">${tbody}</div>`;
-  calcBatchCost();
+  document.getElementById('ingredientsTable').innerHTML =
+    `<div style="background:var(--off-white);border-radius:12px;padding:16px;">${tbody}</div>`;
+  // بعد ما نرسم الجدول نحسب التوتال بس
+  updateTotalsOnly();
 }
 
 function updateIngCost(key, val) {
   ingredientCosts[key] = parseFloat(val) || 0;
   localStorage.setItem('beru_ingredient_costs', JSON.stringify(ingredientCosts));
-  calcBatchCost();
+  // نحدث الـ badge بتاع الـ ingredient ده بس من غير ما نعيد رسم كل حاجة
+  const batchSize = parseFloat(document.getElementById('batch-size').value) || 1000;
+  const ing = FORMULA.find(i => i.costKey === key);
+  if (ing) {
+    const amountMl = (ing.pct / 100) * batchSize;
+    const totalCost = amountMl * ingredientCosts[key];
+    const badge = document.getElementById('cost-badge-' + key);
+    if (badge) badge.textContent = fmt(totalCost) + ' ج';
+  }
+  updateTotalsOnly();
 }
 
-function calcBatchCost() {
+// بتحسب التوتالات بس من غير ما تعيد رسم الجدول
+function updateTotalsOnly() {
   const batchSize = parseFloat(document.getElementById('batch-size').value) || 1000;
   const bottleSize = parseFloat(document.getElementById('bottle-size').value) || 100;
   const sellingPrice = parseFloat(document.getElementById('selling-price').value) || 0;
@@ -1298,12 +1311,16 @@ function calcBatchCost() {
   document.getElementById('batch-bottles').textContent = bottles;
   document.getElementById('bottle-cost').textContent = fmt(bottleCost);
   document.getElementById('bottle-profit').textContent = fmt(bottleProfit);
-  document.getElementById('profit-margin-pct').textContent = marginPct.toFixed(1) + '%';
-  document.getElementById('profit-margin-pct').style.color = marginPct >= 30 ? 'var(--gold)' : marginPct >= 15 ? '#ffd700' : '#ff6b6b';
+  const marginEl = document.getElementById('profit-margin-pct');
+  marginEl.textContent = marginPct.toFixed(1) + '%';
+  marginEl.style.color = marginPct >= 30 ? 'var(--gold)' : marginPct >= 15 ? '#ffd700' : '#ff6b6b';
+}
 
-  // re-render ingredient costs
+function calcBatchCost() {
+  // بيعيد رسم الجدول كامل لما يتغير حجم الدفعة أو الزجاجة
   renderIngredients();
 }
+
 
 async function saveCostToSheets() {
   const batchSize = parseFloat(document.getElementById('batch-size').value) || 1000;
