@@ -3,1067 +3,1498 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BERU — لوحة التحكم</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<title>BERU — نظام المبيعات</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --berry: #C4607A;
-    --velvet: #7B3FA0;
-    --luxurious: #5A8C5C;
-    --gold: #C9A84C;
-    --bg: #0f0e0e;
-    --surface: #1a1818;
-    --surface2: #232020;
-    --border: rgba(255,255,255,0.07);
-    --text: #f0ebe8;
-    --text-muted: #7a7370;
-    --green: #4caf7d;
-    --red: #e05c6a;
-  }
+:root {
+  --green: #2F5D50;
+  --green-light: #3d7a69;
+  --green-dark: #1e3d35;
+  --gold: #E6C77B;
+  --gold-light: #f0d898;
+  --off-white: #F5F7F6;
+  --white: #ffffff;
+  --danger: #c0392b;
+  --danger-light: #e74c3c;
+  --warning: #e67e22;
+  --success: #27ae60;
+  --text-dark: #1a2e28;
+  --text-muted: #6b8f82;
+  --border: #d4e4df;
+  --shadow: 0 4px 24px rgba(47,93,80,0.10);
+  --shadow-lg: 0 8px 40px rgba(47,93,80,0.18);
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: 'Cairo', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    direction: rtl;
-  }
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--off-white);
+  color: var(--text-dark);
+  min-height: 100vh;
+  direction: rtl;
+}
 
-  /* HEADER */
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 32px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+/* ─── HEADER ─── */
+.header {
+  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 60%, var(--green-light) 100%);
+  color: white;
+  padding: 0 32px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-lg);
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.header-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 3px;
+}
+.header-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 1px;
+  font-weight: 300;
+  margin-top: 2px;
+}
+.header-sync {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.8);
+}
+.sync-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2ecc71;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.5; transform:scale(0.8); }
+}
 
-  .logo {
-    font-size: 28px;
-    font-weight: 900;
-    letter-spacing: 6px;
-    background: linear-gradient(135deg, #f0ebe8, var(--gold));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+/* ─── NAV ─── */
+.nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  padding: 0 32px;
+  gap: 4px;
+  overflow-x: auto;
+}
+.nav-btn {
+  padding: 14px 22px;
+  border: none;
+  background: none;
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.nav-btn:hover { color: var(--green); }
+.nav-btn.active {
+  color: var(--green);
+  border-bottom-color: var(--gold);
+}
 
-  .header-date {
-    font-size: 13px;
-    color: var(--text-muted);
-    font-weight: 300;
-  }
+/* ─── MAIN ─── */
+.main {
+  padding: 28px 32px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
 
-  /* NAV TABS */
-  .nav-tabs {
-    display: flex;
-    gap: 4px;
-    padding: 16px 32px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-  }
+/* ─── SECTION TITLE ─── */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--green-dark);
+  margin-bottom: 6px;
+}
+.section-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
 
-  .tab {
-    padding: 8px 20px;
-    border-radius: 8px;
-    border: none;
-    background: transparent;
-    color: var(--text-muted);
-    font-family: 'Cairo', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
+/* ─── KPI CARDS ─── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.kpi-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  border-right: 4px solid var(--green);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.kpi-card:hover { transform: translateY(-2px); }
+.kpi-card.gold { border-right-color: var(--gold); }
+.kpi-card.danger { border-right-color: var(--danger); }
+.kpi-card.success { border-right-color: var(--success); }
+.kpi-card.warning { border-right-color: var(--warning); }
+.kpi-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.kpi-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  color: var(--green-dark);
+  font-weight: 700;
+  line-height: 1;
+}
+.kpi-unit {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.kpi-trend {
+  font-size: 12px;
+  margin-top: 6px;
+  font-weight: 600;
+}
+.kpi-trend.up { color: var(--success); }
+.kpi-trend.down { color: var(--danger); }
 
-  .tab.active {
-    background: var(--berry);
-    color: white;
-  }
+/* ─── HEALTH METER ─── */
+.health-section {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 28px;
+}
+.health-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--green-dark);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.health-indicators {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.health-indicator {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--off-white);
+  text-align: center;
+}
+.health-indicator-name {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.health-indicator-value {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+}
+.health-indicator-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  margin-top: 8px;
+  overflow: hidden;
+}
+.health-indicator-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+.status-good { color: var(--success); }
+.status-warn { color: var(--warning); }
+.status-bad { color: var(--danger); }
+.fill-good { background: var(--success); }
+.fill-warn { background: var(--warning); }
+.fill-bad { background: var(--danger); }
 
-  .tab:hover:not(.active) {
-    background: var(--surface2);
-    color: var(--text);
-  }
+/* ─── PANELS ─── */
+.panel {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.panel-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
 
-  /* MAIN */
-  .main { padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
+/* ─── FORM GRID ─── */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-group.full { grid-column: 1 / -1; }
+label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+}
+input, select, textarea {
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text-dark);
+  background: var(--off-white);
+  transition: border-color 0.2s;
+  direction: rtl;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--green);
+  background: white;
+}
 
-  /* SECTION */
-  .section { display: none; }
-  .section.active { display: block; }
+/* ─── BUTTONS ─── */
+.btn {
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--green), var(--green-light));
+  color: white;
+  box-shadow: 0 4px 12px rgba(47,93,80,0.3);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(47,93,80,0.4); }
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--green-dark);
+}
+.btn-gold:hover { transform: translateY(-1px); }
+.btn-danger {
+  background: var(--danger);
+  color: white;
+  padding: 7px 14px;
+  font-size: 12px;
+}
+.btn-sm {
+  padding: 7px 14px;
+  font-size: 12px;
+}
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--green);
+  color: var(--green);
+}
 
-  /* STATS GRID */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
+/* ─── TABLE ─── */
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+th {
+  background: var(--green-dark);
+  color: var(--gold);
+  padding: 12px 16px;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dark);
+}
+tr:hover td { background: rgba(47,93,80,0.04); }
+tr:last-child td { border-bottom: none; }
 
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-  }
+/* ─── RECIPE ─── */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.ingredient-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.ingredient-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ingredient-pct {
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 50px;
+  text-align: center;
+}
+.ingredient-role {
+  font-size: 11px;
+  color: white;
+  background: var(--green);
+  padding: 2px 8px;
+  border-radius: 20px;
+  width: 110px;
+  text-align: center;
+}
+.ingredient-cost {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ingredient-cost input {
+  width: 90px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+.cost-badge {
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 700;
+  background: var(--green-dark);
+  padding: 3px 8px;
+  border-radius: 6px;
+  min-width: 65px;
+  text-align: center;
+}
 
-  .stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 4px;
-    height: 100%;
-    border-radius: 0 16px 16px 0;
-  }
+/* ─── BADGE ─── */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.badge-green { background: rgba(47,93,80,0.12); color: var(--green); }
+.badge-gold { background: rgba(230,199,123,0.25); color: #a07b1e; }
+.badge-red { background: rgba(192,57,43,0.12); color: var(--danger); }
 
-  .stat-card.berry::before { background: var(--berry); }
-  .stat-card.velvet::before { background: var(--velvet); }
-  .stat-card.luxurious::before { background: var(--luxurious); }
-  .stat-card.gold::before { background: var(--gold); }
-  .stat-card.green::before { background: var(--green); }
-  .stat-card.red::before { background: var(--red); }
+/* ─── TOAST ─── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--green-dark);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 999;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 280px;
+  justify-content: center;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.error { background: var(--danger); }
 
-  .stat-label {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 400;
-    margin-bottom: 8px;
-  }
+/* ─── LOADING ─── */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  display: none;
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-  .stat-value {
-    font-size: 32px;
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
+/* ─── TAB PAGES ─── */
+.tab-page { display: none; }
+.tab-page.active { display: block; }
 
-  .stat-sub {
-    font-size: 12px;
-    color: var(--text-muted);
-  }
+/* ─── PRODUCT TAG ─── */
+.product-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: 6px;
+}
+.dot-berry { background: #e91e8c; }
+.dot-velvet { background: #6c3483; }
+.dot-luxurious { background: var(--green); }
 
-  .stat-value.green { color: var(--green); }
-  .stat-value.red { color: var(--red); }
-  .stat-value.gold { color: var(--gold); }
+/* ─── ALERT BOX ─── */
+.alert-box {
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.alert-success { background: rgba(39,174,96,0.1); border-right: 4px solid var(--success); color: #1a6b3c; }
+.alert-warning { background: rgba(230,126,34,0.1); border-right: 4px solid var(--warning); color: #7d4c10; }
+.alert-danger { background: rgba(192,57,43,0.1); border-right: 4px solid var(--danger); color: var(--danger); }
 
-  /* CARDS */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-
-  .card-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .card-title span { color: var(--text-muted); font-size: 13px; font-weight: 400; }
-
-  /* TABLE */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-
-  th {
-    text-align: right;
-    padding: 10px 14px;
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 12px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  td {
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(255,255,255,0.02); }
-
-  /* BADGE */
-  .badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-  }
-
-  .badge.berry { background: rgba(196,96,122,0.2); color: var(--berry); }
-  .badge.velvet { background: rgba(123,63,160,0.2); color: #b57bec; }
-  .badge.luxurious { background: rgba(90,140,92,0.2); color: #7ec880; }
-  .badge.sample { background: rgba(201,168,76,0.2); color: var(--gold); }
-  .badge.delivered { background: rgba(76,175,125,0.2); color: var(--green); }
-  .badge.pending { background: rgba(255,180,50,0.2); color: #ffb432; }
-
-  /* FORM */
-  .form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-
-  label {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 600;
-  }
-
-  input, select, textarea {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 14px;
-    color: var(--text);
-    font-family: 'Cairo', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border 0.2s;
-    direction: rtl;
-  }
-
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--berry);
-  }
-
-  select option { background: var(--surface2); }
-
-  /* BUTTONS */
-  .btn {
-    padding: 10px 24px;
-    border-radius: 10px;
-    border: none;
-    font-family: 'Cairo', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-primary { background: var(--berry); color: white; }
-  .btn-primary:hover { background: #b54d6a; transform: translateY(-1px); }
-  .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-  .btn-ghost:hover { background: var(--surface2); color: var(--text); }
-  .btn-danger { background: rgba(224,92,106,0.15); color: var(--red); border: 1px solid rgba(224,92,106,0.3); }
-  .btn-sm { padding: 5px 12px; font-size: 12px; }
-
-  /* PROGRESS BAR */
-  .progress-bar {
-    height: 6px;
-    background: var(--surface2);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-top: 8px;
-  }
-
-  .progress-fill {
-    height: 100%;
-    border-radius: 10px;
-    transition: width 0.5s ease;
-  }
-
-  /* TWO COL */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
-
-  /* SCENT ROW */
-  .scent-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .scent-row:last-child { border-bottom: none; }
-
-  .scent-name {
-    font-weight: 700;
-    font-size: 15px;
-  }
-
-  .scent-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-  /* PROFIT INDICATOR */
-  .profit-pill {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  .profit-pill.positive { background: rgba(76,175,125,0.15); color: var(--green); }
-  .profit-pill.negative { background: rgba(224,92,106,0.15); color: var(--red); }
-
-  /* ALERT */
-  .alert {
-    padding: 12px 16px;
-    border-radius: 10px;
-    font-size: 13px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .alert.warning { background: rgba(255,180,50,0.1); border: 1px solid rgba(255,180,50,0.2); color: #ffb432; }
-  .alert.success { background: rgba(76,175,125,0.1); border: 1px solid rgba(76,175,125,0.2); color: var(--green); }
-
-  /* DIVIDER */
-  .divider { height: 1px; background: var(--border); margin: 20px 0; }
-
-  /* EMPTY STATE */
-  .empty { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 10px; }
+/* responsive */
+@media (max-width: 768px) {
+  .main { padding: 16px; }
+  .header { padding: 0 16px; }
+  .nav { padding: 0 8px; }
+  .recipe-grid { grid-template-columns: 1fr; }
+  .kpi-value { font-size: 22px; }
+}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
-  <div class="logo">BERU</div>
-  <div class="header-date" id="currentDate"></div>
+  <div class="header-brand">
+    <div>
+      <div class="header-logo">BERU</div>
+      <div class="header-sub">نظام إدارة المبيعات</div>
+    </div>
+  </div>
+  <div class="header-sync">
+    <div class="sync-dot" id="syncDot"></div>
+    <span id="syncStatus">متصل بـ Google Sheets</span>
+  </div>
 </div>
 
-<div class="nav-tabs">
-  <button class="tab active" onclick="switchTab('overview')">📊 نظرة عامة</button>
-  <button class="tab" onclick="switchTab('orders')">📦 الطلبات</button>
-  <button class="tab" onclick="switchTab('inventory')">🧪 المخزون</button>
-  <button class="tab" onclick="switchTab('finance')">💰 الحسابات</button>
-  <button class="tab" onclick="switchTab('expenses')">💸 المصاريف</button>
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn active" onclick="showTab('dashboard')">📊 الداشبورد</button>
+  <button class="nav-btn" onclick="showTab('sales')">💰 تسجيل مبيعات</button>
+  <button class="nav-btn" onclick="showTab('costs')">🧪 تكلفة الإنتاج</button>
+  <button class="nav-btn" onclick="showTab('materials')">🧴 المواد الخام</button>
+  <button class="nav-btn" onclick="showTab('history')">📋 سجل المبيعات</button>
+  <button class="nav-btn" onclick="showTab('settings')">⚙️ الإعدادات</button>
 </div>
 
 <div class="main">
 
-  <!-- ===== OVERVIEW ===== -->
-  <div class="section active" id="section-overview">
+<!-- ═══════════════ DASHBOARD ═══════════════ -->
+<div class="tab-page active" id="tab-dashboard">
+  <div class="section-title">لوحة التحكم</div>
+  <div class="section-sub" id="dashDate">—</div>
 
-    <div id="low-stock-alert"></div>
-
-    <div class="stats-grid">
-      <div class="stat-card green">
-        <div class="stat-label">إجمالي الإيرادات</div>
-        <div class="stat-value green" id="totalRevenue">0</div>
-        <div class="stat-sub">جنيه مصري</div>
+  <!-- Project Health -->
+  <div class="health-section">
+    <div class="health-title">🎯 مؤشرات صحة المشروع</div>
+    <div class="health-indicators" id="healthIndicators">
+      <div class="health-indicator">
+        <div class="health-indicator-name">هامش الربح</div>
+        <div class="health-indicator-value status-good" id="hi-margin">—</div>
+        <div class="health-indicator-bar"><div class="health-indicator-fill fill-good" id="hi-margin-bar" style="width:0%"></div></div>
       </div>
-      <div class="stat-card red">
-        <div class="stat-label">إجمالي المصاريف</div>
-        <div class="stat-value red" id="totalExpenses">0</div>
-        <div class="stat-sub">جنيه مصري</div>
+      <div class="health-indicator">
+        <div class="health-indicator-name">نقطة التعادل</div>
+        <div class="health-indicator-value status-warn" id="hi-breakeven">—</div>
+        <div class="health-indicator-bar"><div class="health-indicator-fill fill-warn" id="hi-breakeven-bar" style="width:0%"></div></div>
       </div>
-      <div class="stat-card gold">
-        <div class="stat-label">صافي الربح</div>
-        <div class="stat-value gold" id="netProfit">0</div>
-        <div class="stat-sub">جنيه مصري</div>
+      <div class="health-indicator">
+        <div class="health-indicator-name">نمو المبيعات</div>
+        <div class="health-indicator-value status-good" id="hi-growth">—</div>
+        <div class="health-indicator-bar"><div class="health-indicator-fill fill-good" id="hi-growth-bar" style="width:0%"></div></div>
       </div>
-      <div class="stat-card berry">
-        <div class="stat-label">طلبات منجزة</div>
-        <div class="stat-value" id="totalOrders">0</div>
-        <div class="stat-sub">طلب</div>
+      <div class="health-indicator">
+        <div class="health-indicator-name">تغطية التكاليف</div>
+        <div class="health-indicator-value status-warn" id="hi-coverage">—</div>
+        <div class="health-indicator-bar"><div class="health-indicator-fill fill-warn" id="hi-coverage-bar" style="width:0%"></div></div>
       </div>
-      <div class="stat-card velvet">
-        <div class="stat-label">طلبات معلقة</div>
-        <div class="stat-value" id="pendingOrders">0</div>
-        <div class="stat-sub">طلب</div>
-      </div>
-      <div class="stat-card luxurious">
-        <div class="stat-label">السيولة المتاحة</div>
-        <div class="stat-value" id="liquidity">2000</div>
-        <div class="stat-sub">جنيه مصري</div>
+      <div class="health-indicator">
+        <div class="health-indicator-name">ROI</div>
+        <div class="health-indicator-value status-good" id="hi-roi">—</div>
+        <div class="health-indicator-bar"><div class="health-indicator-fill fill-good" id="hi-roi-bar" style="width:0%"></div></div>
       </div>
     </div>
+    <div id="projectVerdict" style="margin-top:16px; font-size:14px; font-weight:700; text-align:center; padding:12px; border-radius:10px;"></div>
+  </div>
 
-    <div class="two-col">
-      <div class="card">
-        <div class="card-title">مبيعات حسب الريحة</div>
-        <div id="scentSales">
-          <div class="scent-row">
-            <div>
-              <div class="scent-name" style="color: var(--berry)">Berry 🍓</div>
-              <div class="scent-meta" id="berrySales">0 عبوة — 0 جنيه</div>
-            </div>
-            <div>
-              <div class="progress-bar" style="width:120px">
-                <div class="progress-fill" id="berryBar" style="background:var(--berry);width:0%"></div>
-              </div>
-            </div>
-          </div>
-          <div class="scent-row">
-            <div>
-              <div class="scent-name" style="color: #b57bec">Velvet 💜</div>
-              <div class="scent-meta" id="velvetSales">0 عبوة — 0 جنيه</div>
-            </div>
-            <div>
-              <div class="progress-bar" style="width:120px">
-                <div class="progress-fill" id="velvetBar" style="background:var(--velvet);width:0%"></div>
-              </div>
-            </div>
-          </div>
-          <div class="scent-row">
-            <div>
-              <div class="scent-name" style="color: #7ec880">Luxurious 🌿</div>
-              <div class="scent-meta" id="luxSales">0 عبوة — 0 جنيه</div>
-            </div>
-            <div>
-              <div class="progress-bar" style="width:120px">
-                <div class="progress-fill" id="luxBar" style="background:var(--luxurious);width:0%"></div>
-              </div>
-            </div>
-          </div>
-          <div class="scent-row">
-            <div>
-              <div class="scent-name" style="color: var(--gold)">باكدج تجربة ✦</div>
-              <div class="scent-meta" id="sampleSales">0 باكدج — 0 جنيه</div>
-            </div>
-            <div>
-              <div class="progress-bar" style="width:120px">
-                <div class="progress-fill" id="sampleBar" style="background:var(--gold);width:0%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">ملخص المخزون</div>
-        <div id="inventoryOverview">
-          <div class="scent-row">
-            <div>
-              <div class="scent-name">البوتلات الفاضية</div>
-              <div class="scent-meta" id="invBottles">— عبوة</div>
-            </div>
-            <span class="badge berry" id="invBottlesBadge">—</span>
-          </div>
-          <div class="scent-row">
-            <div>
-              <div class="scent-name">الأقلام العطرية</div>
-              <div class="scent-meta" id="invPens">— قلم</div>
-            </div>
-            <span class="badge sample" id="invPensBadge">—</span>
-          </div>
-          <div class="scent-row">
-            <div>
-              <div class="scent-name">الاستيكرز</div>
-              <div class="scent-meta" id="invStickers">— استيكر</div>
-            </div>
-            <span class="badge luxurious" id="invStickersBadge">—</span>
-          </div>
-          <div class="scent-row">
-            <div>
-              <div class="scent-name">الكحول (لتر)</div>
-              <div class="scent-meta" id="invAlcohol">— لتر</div>
-            </div>
-            <span class="badge velvet" id="invAlcoholBadge">—</span>
-          </div>
-        </div>
-      </div>
+  <!-- KPIs -->
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi-card">
+      <div class="kpi-label">إجمالي المبيعات</div>
+      <div class="kpi-value" id="kpi-revenue">0</div>
+      <div class="kpi-unit">جنيه</div>
     </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">صافي الربح</div>
+      <div class="kpi-value" id="kpi-profit">0</div>
+      <div class="kpi-unit">جنيه</div>
+    </div>
+    <div class="kpi-card success">
+      <div class="kpi-label">وحدات مباعة</div>
+      <div class="kpi-value" id="kpi-units">0</div>
+      <div class="kpi-unit">قطعة</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">تكلفة الإنتاج الكلية</div>
+      <div class="kpi-value" id="kpi-totalcost">0</div>
+      <div class="kpi-unit">جنيه</div>
+    </div>
+    <div class="kpi-card warning">
+      <div class="kpi-label">متوسط سعر الوحدة</div>
+      <div class="kpi-value" id="kpi-avgprice">0</div>
+      <div class="kpi-unit">جنيه/قطعة</div>
+    </div>
+    <div class="kpi-card danger">
+      <div class="kpi-label">تكلفة الوحدة المنتجة</div>
+      <div class="kpi-value" id="kpi-unitcost">0</div>
+      <div class="kpi-unit">جنيه/قطعة</div>
+    </div>
+  </div>
 
-    <div class="card">
-      <div class="card-title">آخر الطلبات <span id="lastOrdersCount"></span></div>
+  <!-- Breakdown by product -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">مبيعات حسب المنتج</span>
+      <button class="btn btn-outline btn-sm" onclick="loadData()">🔄 تحديث</button>
+    </div>
+    <div class="table-wrap">
       <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>الزبون</th>
-            <th>المنتج</th>
-            <th>السعر</th>
-            <th>الحالة</th>
-            <th>التاريخ</th>
-          </tr>
-        </thead>
-        <tbody id="recentOrdersTable">
-          <tr><td colspan="6" class="empty">لا يوجد طلبات بعد</td></tr>
+        <thead><tr>
+          <th>المنتج</th>
+          <th>وحدات مباعة</th>
+          <th>إيرادات</th>
+          <th>تكلفة</th>
+          <th>ربح</th>
+          <th>هامش %</th>
+        </tr></thead>
+        <tbody id="productBreakdown">
+          <tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px;">لا توجد بيانات بعد</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- ===== ORDERS ===== -->
-  <div class="section" id="section-orders">
-    <div class="card">
-      <div class="card-title">إضافة طلب جديد</div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>اسم الزبون</label>
-          <input type="text" id="orderName" placeholder="اسم الزبون">
-        </div>
-        <div class="form-group">
-          <label>المنتج</label>
-          <select id="orderProduct">
-            <option value="berry">Berry — بودي سبلاش</option>
-            <option value="velvet">Velvet — بودي سبلاش</option>
-            <option value="luxurious">Luxurious — بودي سبلاش</option>
-            <option value="sample">باكدج تجربة (3 أقلام)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>الكمية</label>
-          <input type="number" id="orderQty" placeholder="1" min="1" value="1">
-        </div>
-        <div class="form-group">
-          <label>السعر الإجمالي (جنيه)</label>
-          <input type="number" id="orderPrice" placeholder="170">
-        </div>
-        <div class="form-group">
-          <label>طريقة التواصل</label>
-          <select id="orderSource">
-            <option value="instagram">Instagram</option>
-            <option value="facebook">Facebook</option>
-            <option value="whatsapp">واتساب</option>
-            <option value="direct">مباشر</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>الحالة</label>
-          <select id="orderStatus">
-            <option value="pending">معلق</option>
-            <option value="delivered">تم التسليم</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group" style="margin-bottom:16px">
-        <label>ملاحظات</label>
-        <input type="text" id="orderNotes" placeholder="أي ملاحظات...">
-      </div>
-      <button class="btn btn-primary" onclick="addOrder()">✦ إضافة الطلب</button>
-    </div>
-
-    <div class="card">
-      <div class="card-title">كل الطلبات <span id="allOrdersCount"></span></div>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>الزبون</th>
-            <th>المنتج</th>
-            <th>الكمية</th>
-            <th>السعر</th>
-            <th>المصدر</th>
-            <th>الحالة</th>
-            <th>التاريخ</th>
-            <th>حذف</th>
-          </tr>
-        </thead>
-        <tbody id="allOrdersTable">
-          <tr><td colspan="9" class="empty">لا يوجد طلبات بعد</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ===== INVENTORY ===== -->
-  <div class="section" id="section-inventory">
-    <div class="card">
-      <div class="card-title">تحديث المخزون</div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>البوتلات الفاضية (عبوة)</label>
-          <input type="number" id="invBottlesInput" placeholder="0">
-        </div>
-        <div class="form-group">
-          <label>الأقلام العطرية (قلم)</label>
-          <input type="number" id="invPensInput" placeholder="0">
-        </div>
-        <div class="form-group">
-          <label>الاستيكرز (قطعة)</label>
-          <input type="number" id="invStickersInput" placeholder="0">
-        </div>
-        <div class="form-group">
-          <label>الكحول (لتر)</label>
-          <input type="number" id="invAlcoholInput" placeholder="0" step="0.1">
-        </div>
-        <div class="form-group">
-          <label>زيوت عطرية Berry (مل)</label>
-          <input type="number" id="invBerryOil" placeholder="0">
-        </div>
-        <div class="form-group">
-          <label>زيوت عطرية Velvet (مل)</label>
-          <input type="number" id="invVelvetOil" placeholder="0">
-        </div>
-        <div class="form-group">
-          <label>زيوت عطرية Luxurious (مل)</label>
-          <input type="number" id="invLuxOil" placeholder="0">
-        </div>
-        <div class="form-group">
-          <label>مذيبات / مواد حافظة (مل)</label>
-          <input type="number" id="invPreservatives" placeholder="0">
-        </div>
-      </div>
-      <button class="btn btn-primary" onclick="saveInventory()">✦ حفظ المخزون</button>
-    </div>
-
-    <div class="card">
-      <div class="card-title">الطاقة الإنتاجية المتاحة</div>
-      <div id="productionCapacity">
-        <div class="scent-row">
-          <div>
-            <div class="scent-name">بودي سبلاش (240ml)</div>
-            <div class="scent-meta">حسب البوتلات والكحول والزيوت المتاحة</div>
-          </div>
-          <div class="stat-value" id="canProduceSplash" style="font-size:24px">—</div>
-        </div>
-        <div class="scent-row">
-          <div>
-            <div class="scent-name">باكدج تجربة (3 أقلام)</div>
-            <div class="scent-meta">حسب الأقلام المتاحة</div>
-          </div>
-          <div class="stat-value" id="canProduceSample" style="font-size:24px">—</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== FINANCE ===== -->
-  <div class="section" id="section-finance">
-    <div class="stats-grid">
-      <div class="stat-card green">
-        <div class="stat-label">إجمالي الإيرادات</div>
-        <div class="stat-value green" id="finRevenue">0</div>
-        <div class="stat-sub">جنيه</div>
-      </div>
-      <div class="stat-card red">
-        <div class="stat-label">تكلفة المبيعات</div>
-        <div class="stat-value red" id="finCOGS">0</div>
-        <div class="stat-sub">جنيه</div>
-      </div>
-      <div class="stat-card gold">
-        <div class="stat-label">هامش الربح الإجمالي</div>
-        <div class="stat-value gold" id="finGrossMargin">0%</div>
-        <div class="stat-sub">Gross Margin</div>
-      </div>
-      <div class="stat-card berry">
-        <div class="stat-label">المصاريف التشغيلية</div>
-        <div class="stat-value" id="finOpex">0</div>
-        <div class="stat-sub">جنيه</div>
-      </div>
-      <div class="stat-card green">
-        <div class="stat-label">صافي الربح</div>
-        <div class="stat-value green" id="finNet">0</div>
-        <div class="stat-sub">جنيه</div>
-      </div>
-      <div class="stat-card luxurious">
-        <div class="stat-label">العائد على الاستثمار</div>
-        <div class="stat-value" id="finROI" style="color:var(--green)">0%</div>
-        <div class="stat-sub">ROI</div>
-      </div>
-    </div>
-
-    <div class="two-col">
-      <div class="card">
-        <div class="card-title">ربحية كل منتج</div>
-        <div class="scent-row">
-          <div>
-            <div class="scent-name" style="color:var(--berry)">Berry — بودي سبلاش</div>
-            <div class="scent-meta">سعر البيع: 170 جنيه | التكلفة: 90 جنيه</div>
-          </div>
-          <span class="profit-pill positive">+80 جنيه</span>
-        </div>
-        <div class="scent-row">
-          <div>
-            <div class="scent-name" style="color:#b57bec">Velvet — بودي سبلاش</div>
-            <div class="scent-meta">سعر البيع: 170 جنيه | التكلفة: 90 جنيه</div>
-          </div>
-          <span class="profit-pill positive">+80 جنيه</span>
-        </div>
-        <div class="scent-row">
-          <div>
-            <div class="scent-name" style="color:#7ec880">Luxurious — بودي سبلاش</div>
-            <div class="scent-meta">سعر البيع: 170 جنيه | التكلفة: 90 جنيه</div>
-          </div>
-          <span class="profit-pill positive">+80 جنيه</span>
-        </div>
-        <div class="scent-row">
-          <div>
-            <div class="scent-name" style="color:var(--gold)">باكدج تجربة (3 أقلام)</div>
-            <div class="scent-meta">سعر البيع: 80 جنيه | التكلفة: 45 جنيه</div>
-          </div>
-          <span class="profit-pill positive">+35 جنيه</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">السيولة والتدفق النقدي</div>
-        <div class="scent-row">
-          <div class="scent-name">السيولة الابتدائية</div>
-          <div style="font-weight:700">2,000 جنيه</div>
-        </div>
-        <div class="scent-row">
-          <div class="scent-name">إجمالي الإيرادات</div>
-          <div style="font-weight:700;color:var(--green)" id="cashRevenue">+0</div>
-        </div>
-        <div class="scent-row">
-          <div class="scent-name">إجمالي المصاريف</div>
-          <div style="font-weight:700;color:var(--red)" id="cashExpenses">-0</div>
-        </div>
-        <div class="divider"></div>
-        <div class="scent-row">
-          <div class="scent-name" style="font-size:16px;font-weight:900">السيولة الحالية</div>
-          <div style="font-weight:900;font-size:20px;color:var(--gold)" id="cashCurrent">2,000</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== EXPENSES ===== -->
-  <div class="section" id="section-expenses">
-    <div class="card">
-      <div class="card-title">إضافة مصروف</div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>البند</label>
-          <input type="text" id="expName" placeholder="مثال: خامات Berry">
-        </div>
-        <div class="form-group">
-          <label>التصنيف</label>
-          <select id="expCategory">
-            <option value="raw">خامات (Raw Material)</option>
-            <option value="packaging">تغليف واستيكرز</option>
-            <option value="shipping">شحن وتوصيل</option>
-            <option value="marketing">تسويق</option>
-            <option value="other">أخرى</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>المبلغ (جنيه)</label>
-          <input type="number" id="expAmount" placeholder="0">
-        </div>
-        <div class="form-group">
-          <label>التاريخ</label>
-          <input type="date" id="expDate">
-        </div>
-      </div>
-      <div class="form-group" style="margin-bottom:16px">
-        <label>ملاحظات</label>
-        <input type="text" id="expNotes" placeholder="تفاصيل إضافية...">
-      </div>
-      <button class="btn btn-primary" onclick="addExpense()">✦ إضافة المصروف</button>
-    </div>
-
-    <div class="card">
-      <div class="card-title">كل المصاريف <span id="expensesTotal"></span></div>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>البند</th>
-            <th>التصنيف</th>
-            <th>المبلغ</th>
-            <th>التاريخ</th>
-            <th>ملاحظات</th>
-            <th>حذف</th>
-          </tr>
-        </thead>
-        <tbody id="expensesTable">
-          <tr><td colspan="7" class="empty">لا يوجد مصاريف بعد</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
+  <!-- Alerts -->
+  <div id="alertsSection"></div>
 </div>
 
+<!-- ═══════════════ SALES ═══════════════ -->
+<div class="tab-page" id="tab-sales">
+  <div class="section-title">تسجيل مبيعة جديدة</div>
+  <div class="section-sub">سجل كل عملية بيع — بيتحفظ فورًا على Google Sheets</div>
+
+  <div class="panel">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>التاريخ</label>
+        <input type="date" id="s-date">
+      </div>
+      <div class="form-group">
+        <label>المنتج</label>
+        <select id="s-product">
+          <option value="">اختر المنتج</option>
+          <option value="Berry">Berry 🩷</option>
+          <option value="Velvet">Velvet 💜</option>
+          <option value="Luxurious Bouquet">Luxurious Bouquet 💚</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>الكمية (قطعة)</label>
+        <input type="number" id="s-qty" placeholder="0" min="1">
+      </div>
+      <div class="form-group">
+        <label>سعر البيع للقطعة (جنيه)</label>
+        <input type="number" id="s-price" placeholder="0" min="0" step="0.5">
+      </div>
+      <div class="form-group">
+        <label>قناة البيع</label>
+        <select id="s-channel">
+          <option value="مباشر">مباشر</option>
+          <option value="أونلاين">أونلاين</option>
+          <option value="تجار">تجار</option>
+          <option value="معارض">معارض</option>
+          <option value="أخرى">أخرى</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>ملاحظات (اختياري)</label>
+        <input type="text" id="s-notes" placeholder="أي ملاحظة...">
+      </div>
+    </div>
+
+    <!-- Live calc -->
+    <div style="margin-top:20px; background:var(--green-dark); color:white; border-radius:12px; padding:16px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; text-align:center;" id="saleCalc">
+      <div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:4px;">إجمالي البيعة</div>
+        <div style="font-size:22px;font-family:'Playfair Display',serif;color:var(--gold);" id="calc-total">0</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">جنيه</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:4px;">تكلفة التشغيل</div>
+        <div style="font-size:22px;font-family:'Playfair Display',serif;" id="calc-cost">0</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">جنيه</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:4px;">ربح متوقع</div>
+        <div style="font-size:22px;font-family:'Playfair Display',serif;" id="calc-profit">0</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">جنيه</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px; display:flex; gap:12px; justify-content:flex-end;">
+      <button class="btn btn-primary" onclick="saveSale()">💾 حفظ البيعة على Sheets</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ COSTS ═══════════════ -->
+<div class="tab-page" id="tab-costs">
+  <div class="section-title">حساب تكلفة الإنتاج</div>
+  <div class="section-sub">تكلفة بودي سبلاش لكل دفعة — الفورميلا محملة تلقائيًا</div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">⚗️ فورميلا Body Splash — حدد حجم الدفعة</span>
+    </div>
+    <div class="form-grid" style="margin-bottom:20px;">
+      <div class="form-group">
+        <label>حجم الدفعة (مل)</label>
+        <input type="number" id="batch-size" value="1000" min="100" step="100" oninput="calcBatchCost()">
+      </div>
+      <div class="form-group">
+        <label>حجم الزجاجة الواحدة (مل)</label>
+        <input type="number" id="bottle-size" value="100" min="10" step="10" oninput="calcBatchCost()">
+      </div>
+      <div class="form-group">
+        <label>سعر البيع للزجاجة (جنيه)</label>
+        <input type="number" id="selling-price" value="0" min="0" step="5" oninput="calcBatchCost()">
+      </div>
+    </div>
+
+    <!-- Ingredients table -->
+    <div id="ingredientsTable"></div>
+
+    <!-- Totals -->
+    <div style="margin-top:20px; background:linear-gradient(135deg, var(--green-dark), var(--green)); color:white; border-radius:14px; padding:20px; display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:16px; text-align:center;">
+      <div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:4px;">تكلفة الدفعة الكلية</div>
+        <div style="font-size:24px;font-family:'Playfair Display',serif;color:var(--gold);" id="batch-total-cost">0</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">جنيه</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:4px;">عدد الزجاجات</div>
+        <div style="font-size:24px;font-family:'Playfair Display',serif;" id="batch-bottles">0</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">زجاجة</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:4px;">تكلفة الزجاجة</div>
+        <div style="font-size:24px;font-family:'Playfair Display',serif;" id="bottle-cost">0</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">جنيه</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:4px;">ربح الزجاجة</div>
+        <div style="font-size:24px;font-family:'Playfair Display',serif;" id="bottle-profit">0</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">جنيه</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:4px;">هامش الربح</div>
+        <div style="font-size:24px;font-family:'Playfair Display',serif;" id="profit-margin-pct">0%</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);">من البيع</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px; display:flex; gap:12px; justify-content:flex-end;">
+      <button class="btn btn-primary" onclick="saveCostToSheets()">💾 حفظ التكلفة على Sheets</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MATERIALS ═══════════════ -->
+<div class="tab-page" id="tab-materials">
+  <div class="section-title">المواد الخام</div>
+  <div class="section-sub">أضف أو عدّل المواد الخام — بيتحفظ على Sheets ومتاح في كل الحسابات</div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">➕ إضافة مادة خام جديدة</span>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>اسم المادة</label>
+        <input type="text" id="m-name" placeholder="مثال: Fragrance Oil XY">
+      </div>
+      <div class="form-group">
+        <label>الكود / المرجع (اختياري)</label>
+        <input type="text" id="m-code" placeholder="FO-001">
+      </div>
+      <div class="form-group">
+        <label>وحدة القياس</label>
+        <select id="m-unit">
+          <option value="مل">مل</option>
+          <option value="جرام">جرام</option>
+          <option value="كيلو">كيلو</option>
+          <option value="لتر">لتر</option>
+          <option value="قطعة">قطعة</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>سعر الشراء (جنيه)</label>
+        <input type="number" id="m-price" placeholder="0.00" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>الكمية المشتراة</label>
+        <input type="number" id="m-qty" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>الدور في الفورميلا</label>
+        <select id="m-role">
+          <option value="active ingredient">Active Ingredient</option>
+          <option value="surfactant">Surfactant</option>
+          <option value="humectant">Humectant</option>
+          <option value="antibacterial">Antibacterial</option>
+          <option value="antifungal">Antifungal</option>
+          <option value="filler">Filler</option>
+          <option value="fragrance">Fragrance</option>
+          <option value="colour">Colour</option>
+          <option value="أخرى">أخرى</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:16px; display:flex; justify-content:flex-end;">
+      <button class="btn btn-primary" onclick="saveMaterial()">💾 إضافة وحفظ</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">📦 المواد المحفوظة</span>
+      <button class="btn btn-outline btn-sm" onclick="loadMaterials()">🔄 تحديث</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>الاسم</th>
+          <th>الكود</th>
+          <th>الدور</th>
+          <th>الوحدة</th>
+          <th>السعر</th>
+          <th>الكمية</th>
+          <th>التكلفة/مل أو جم</th>
+          <th>حذف</th>
+        </tr></thead>
+        <tbody id="materialsTable">
+          <tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:24px;">جاري التحميل...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ HISTORY ═══════════════ -->
+<div class="tab-page" id="tab-history">
+  <div class="section-title">سجل المبيعات</div>
+  <div class="section-sub">كل العمليات المسجلة — مباشر من Google Sheets</div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">📋 جميع المبيعات</span>
+      <div style="display:flex;gap:8px;">
+        <select id="filter-product" style="padding:8px 12px;font-size:12px;width:140px;" onchange="filterHistory()">
+          <option value="">كل المنتجات</option>
+          <option value="Berry">Berry</option>
+          <option value="Velvet">Velvet</option>
+          <option value="Luxurious Bouquet">Luxurious Bouquet</option>
+        </select>
+        <button class="btn btn-outline btn-sm" onclick="loadHistory()">🔄 تحديث</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>التاريخ</th>
+          <th>المنتج</th>
+          <th>الكمية</th>
+          <th>سعر الوحدة</th>
+          <th>إجمالي</th>
+          <th>القناة</th>
+          <th>ملاحظات</th>
+        </tr></thead>
+        <tbody id="historyTable">
+          <tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px;">جاري التحميل...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SETTINGS ═══════════════ -->
+<div class="tab-page" id="tab-settings">
+  <div class="section-title">الإعدادات</div>
+  <div class="section-sub">إعدادات الربط والتكاليف الثابتة</div>
+
+  <div class="panel">
+    <div class="panel-title" style="margin-bottom:16px;">🔗 Google Apps Script Endpoint</div>
+    <div class="form-group">
+      <label>رابط الـ Web App (Apps Script)</label>
+      <input type="text" id="gs-url" placeholder="https://script.google.com/macros/s/...">
+    </div>
+    <div style="margin-top:12px; display:flex; gap:10px;">
+      <button class="btn btn-primary" onclick="saveSettings()">💾 حفظ</button>
+      <button class="btn btn-outline" onclick="testConnection()">🔌 اختبار الاتصال</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" style="margin-bottom:16px;">💸 التكاليف الثابتة الشهرية</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>إيجار / مصاريف تشغيل (جنيه)</label>
+        <input type="number" id="fixed-overhead" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>مصاريف تسويق (جنيه)</label>
+        <input type="number" id="fixed-marketing" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>مصاريف شحن وتغليف للوحدة (جنيه)</label>
+        <input type="number" id="fixed-packaging" placeholder="0" step="0.5">
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="btn btn-primary" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div style="text-align:center;">
+    <div class="spinner"></div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text-muted);" id="loadingMsg">جاري الحفظ...</div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ تم الحفظ بنجاح</div>
+
 <script>
-// ===== STATE =====
-let state = {
-  orders: [],
-  expenses: [],
-  inventory: {
-    bottles: 0, pens: 0, stickers: 0, alcohol: 0,
-    berryOil: 0, velvetOil: 0, luxOil: 0, preservatives: 0
-  }
-};
+// ══════════════════════════════════════════
+// CONFIG & STATE
+// ══════════════════════════════════════════
+const DEFAULT_GS_URL = "https://script.google.com/macros/s/AKfycbzbQ-s7DA8MJ-EL7qR0GK03h78r2u__TQ5fae-KBzaab9pf0dQczcw-RMHdy7ip3iR/exec";
 
-const PRICES = { berry: 170, velvet: 170, luxurious: 170, sample: 80 };
-const COSTS  = { berry: 90,  velvet: 90,  luxurious: 90,  sample: 45 };
+let config = JSON.parse(localStorage.getItem('beru_config') || '{}');
+if (!config.gsUrl) config.gsUrl = DEFAULT_GS_URL;
+if (!config.overhead) config.overhead = 0;
+if (!config.marketing) config.marketing = 0;
+if (!config.packaging) config.packaging = 0;
 
-const PRODUCT_LABELS = {
-  berry: 'Berry 🍓', velvet: 'Velvet 💜',
-  luxurious: 'Luxurious 🌿', sample: 'باكدج تجربة ✦'
-};
+// Formula definition
+const FORMULA = [
+  { name: "Perfume Oil",       pct: 10.0, role: "active ingredient",  costKey: "perfume_oil" },
+  { name: "Cremophore",        pct: 3.0,  role: "surfactant",         costKey: "cremophore" },
+  { name: "Tween 20",          pct: 3.0,  role: "surfactant",         costKey: "tween20" },
+  { name: "Propylene Glycol",  pct: 2.0,  role: "humectant",          costKey: "propylene_glycol" },
+  { name: "Glycerin",          pct: 2.0,  role: "humectant",          costKey: "glycerin" },
+  { name: "Phenoxy Ethanol",   pct: 0.5,  role: "antibacterial",      costKey: "phenoxy_ethanol" },
+  { name: "Potassium Sorbate", pct: 0.2,  role: "antifungal",         costKey: "potassium_sorbate" },
+  { name: "Colour",            pct: 0.3,  role: "colour",             costKey: "colour" },
+  { name: "Ethanol 96%",       pct: 41.5, role: "filler",             costKey: "ethanol" },
+  { name: "Water",             pct: 37.5, role: "filler",             costKey: "water" }
+];
 
-const CAT_LABELS = {
-  raw: 'خامات', packaging: 'تغليف', shipping: 'شحن',
-  marketing: 'تسويق', other: 'أخرى'
-};
+let ingredientCosts = JSON.parse(localStorage.getItem('beru_ingredient_costs') || '{}');
+let salesData = [];
+let materialsData = [];
+let allHistory = [];
 
-// ===== STORAGE =====
-function save() { localStorage.setItem('beru_v1', JSON.stringify(state)); }
-function load() {
-  const d = localStorage.getItem('beru_v1');
-  if (d) state = JSON.parse(d);
-}
-
-// ===== TABS =====
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+// ══════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════
+function showTab(tab) {
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
   event.target.classList.add('active');
-  document.getElementById('section-' + tab).classList.add('active');
-  render();
+  if (tab === 'dashboard') loadData();
+  if (tab === 'history') loadHistory();
+  if (tab === 'materials') loadMaterials();
+  if (tab === 'costs') renderIngredients();
+  if (tab === 'settings') loadSettings();
 }
 
-// ===== ADD ORDER =====
-function addOrder() {
-  const name = document.getElementById('orderName').value.trim();
-  const product = document.getElementById('orderProduct').value;
-  const qty = parseInt(document.getElementById('orderQty').value) || 1;
-  const price = parseFloat(document.getElementById('orderPrice').value) || PRICES[product] * qty;
-  const source = document.getElementById('orderSource').value;
-  const status = document.getElementById('orderStatus').value;
-  const notes = document.getElementById('orderNotes').value.trim();
+// ══════════════════════════════════════════
+// GOOGLE SHEETS API
+// ══════════════════════════════════════════
+async function gsRequest(action, data = {}) {
+  const url = config.gsUrl;
+  if (!url) { showToast("❌ لم يتم تحديد رابط Google Script", true); return null; }
+  
+  const body = JSON.stringify({ action, ...data });
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body
+    });
+    const text = await res.text();
+    try { return JSON.parse(text); } catch { return { status: 'ok', raw: text }; }
+  } catch (e) {
+    // CORS fallback — use GET with params
+    try {
+      const params = new URLSearchParams({ action, payload: JSON.stringify(data) });
+      const res2 = await fetch(url + '?' + params.toString());
+      const text2 = await res2.text();
+      try { return JSON.parse(text2); } catch { return { status: 'ok' }; }
+    } catch (e2) {
+      showToast("⚠️ تعذر الوصول للـ Sheets — تأكد من الرابط وصلاحية النشر", true);
+      return null;
+    }
+  }
+}
 
-  if (!name) { alert('اكتب اسم الزبون'); return; }
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+async function loadData() {
+  const today = new Date();
+  document.getElementById('dashDate').textContent =
+    `آخر تحديث: ${today.toLocaleDateString('ar-EG')} — ${today.toLocaleTimeString('ar-EG', {hour:'2-digit',minute:'2-digit'})}`;
 
-  state.orders.push({
-    id: Date.now(), name, product, qty, price, source, status, notes,
-    date: new Date().toLocaleDateString('ar-EG')
+  showLoading("جاري تحميل البيانات من Sheets...");
+  const result = await gsRequest('getSales');
+  hideLoading();
+
+  if (result && result.data) {
+    salesData = result.data;
+  } else {
+    // use local cache
+    salesData = JSON.parse(localStorage.getItem('beru_sales_cache') || '[]');
+  }
+
+  renderDashboard();
+}
+
+function renderDashboard() {
+  let totalRevenue = 0, totalUnits = 0, totalCostCalc = 0;
+  const productMap = {};
+
+  const unitCost = calcUnitCostFromFormula(100);
+
+  salesData.forEach(row => {
+    const qty = parseFloat(row.qty || row[2]) || 0;
+    const price = parseFloat(row.price || row[3]) || 0;
+    const product = row.product || row[1] || 'غير محدد';
+    const rev = qty * price;
+    const cost = qty * (unitCost + parseFloat(config.packaging || 0));
+
+    totalRevenue += rev;
+    totalUnits += qty;
+    totalCostCalc += cost;
+
+    if (!productMap[product]) productMap[product] = { units: 0, revenue: 0, cost: 0 };
+    productMap[product].units += qty;
+    productMap[product].revenue += rev;
+    productMap[product].cost += cost;
   });
 
-  save(); render();
-  document.getElementById('orderName').value = '';
-  document.getElementById('orderNotes').value = '';
-  document.getElementById('orderQty').value = '1';
-  document.getElementById('orderPrice').value = '';
+  const totalProfit = totalRevenue - totalCostCalc - parseFloat(config.overhead || 0) - parseFloat(config.marketing || 0);
+  const marginPct = totalRevenue > 0 ? (totalProfit / totalRevenue * 100) : 0;
+  const avgPrice = totalUnits > 0 ? totalRevenue / totalUnits : 0;
+
+  // KPIs
+  document.getElementById('kpi-revenue').textContent = fmt(totalRevenue);
+  document.getElementById('kpi-profit').textContent = fmt(totalProfit);
+  document.getElementById('kpi-units').textContent = totalUnits;
+  document.getElementById('kpi-totalcost').textContent = fmt(totalCostCalc);
+  document.getElementById('kpi-avgprice').textContent = fmt(avgPrice);
+  document.getElementById('kpi-unitcost').textContent = fmt(unitCost);
+
+  // Product breakdown
+  const tbody = document.getElementById('productBreakdown');
+  if (Object.keys(productMap).length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px;">لا توجد مبيعات بعد</td></tr>';
+  } else {
+    tbody.innerHTML = Object.entries(productMap).map(([p, d]) => {
+      const profit = d.revenue - d.cost;
+      const margin = d.revenue > 0 ? (profit / d.revenue * 100) : 0;
+      const dotClass = p === 'Berry' ? 'dot-berry' : p === 'Velvet' ? 'dot-velvet' : 'dot-luxurious';
+      return `<tr>
+        <td><span class="product-dot ${dotClass}"></span>${p}</td>
+        <td>${d.units}</td>
+        <td>${fmt(d.revenue)} ج</td>
+        <td>${fmt(d.cost)} ج</td>
+        <td style="color:${profit>=0?'var(--success)':'var(--danger)'};font-weight:700">${fmt(profit)} ج</td>
+        <td><span class="badge ${margin>=30?'badge-green':margin>=15?'badge-gold':'badge-red'}">${margin.toFixed(1)}%</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Health indicators
+  const fixedCosts = parseFloat(config.overhead || 0) + parseFloat(config.marketing || 0);
+  const breakEvenUnits = unitCost > 0 && avgPrice > unitCost ? Math.ceil(fixedCosts / (avgPrice - unitCost)) : Infinity;
+  const breakEvenPct = totalUnits > 0 && isFinite(breakEvenUnits) ? Math.min(totalUnits / breakEvenUnits * 100, 100) : 0;
+  const roi = totalCostCalc > 0 ? (totalProfit / totalCostCalc * 100) : 0;
+  const coveragePct = (totalCostCalc + fixedCosts) > 0 ? Math.min(totalRevenue / (totalCostCalc + fixedCosts) * 100, 150) : 0;
+
+  // margin
+  setHealthIndicator('hi-margin', marginPct.toFixed(1) + '%', marginPct, 40, 'hi-margin-bar');
+  // breakeven
+  const bePct = isFinite(breakEvenUnits) ? breakEvenPct : 0;
+  document.getElementById('hi-breakeven').textContent = isFinite(breakEvenUnits) ? breakEvenUnits + ' قطعة' : '—';
+  setHealthBar('hi-breakeven-bar', bePct, bePct >= 100 ? 'good' : bePct >= 50 ? 'warn' : 'bad');
+  setHealthColor('hi-breakeven', bePct >= 100 ? 'good' : bePct >= 50 ? 'warn' : 'bad');
+  // growth (placeholder)
+  document.getElementById('hi-growth').textContent = totalUnits > 0 ? '📈' : '—';
+  setHealthBar('hi-growth-bar', Math.min(totalUnits * 5, 100), 'good');
+  // coverage
+  setHealthIndicator('hi-coverage', coveragePct.toFixed(0) + '%', Math.min(coveragePct, 100), 100, 'hi-coverage-bar');
+  // ROI
+  setHealthIndicator('hi-roi', roi.toFixed(1) + '%', Math.min(roi + 50, 100), 70, 'hi-roi-bar');
+
+  // Verdict
+  const verdict = document.getElementById('projectVerdict');
+  if (totalRevenue === 0) {
+    verdict.textContent = '⏳ لسه ما فيش مبيعات — سجل أول بيعة!';
+    verdict.style.background = 'rgba(47,93,80,0.08)';
+    verdict.style.color = 'var(--green-dark)';
+  } else if (marginPct >= 35 && coveragePct >= 100) {
+    verdict.textContent = '🚀 المشروع شغال ومربح — استمر وتوسع!';
+    verdict.style.background = 'rgba(39,174,96,0.12)';
+    verdict.style.color = 'var(--success)';
+  } else if (marginPct >= 15 && coveragePct >= 80) {
+    verdict.textContent = '⚠️ المشروع بيشتغل لكن الهامش محتاج تحسين — راجع التسعير أو خفض التكلفة';
+    verdict.style.background = 'rgba(230,126,34,0.1)';
+    verdict.style.color = 'var(--warning)';
+  } else {
+    verdict.textContent = '🔴 المشروع في خطر — التكاليف بتتعدى الإيرادات، اتخذ قرار بسرعة!';
+    verdict.style.background = 'rgba(192,57,43,0.08)';
+    verdict.style.color = 'var(--danger)';
+  }
+
+  // Alerts
+  renderAlerts(marginPct, coveragePct, breakEvenUnits, totalUnits);
 }
 
-// ===== DELETE ORDER =====
-function deleteOrder(id) {
-  state.orders = state.orders.filter(o => o.id !== id);
-  save(); render();
+function setHealthIndicator(id, text, pct, threshold, barId) {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  const status = pct >= threshold ? 'good' : pct >= threshold * 0.5 ? 'warn' : 'bad';
+  setHealthColor(id, status);
+  setHealthBar(barId, Math.min(pct, 100), status);
+}
+function setHealthColor(id, status) {
+  const el = document.getElementById(id);
+  el.className = 'health-indicator-value status-' + status;
+}
+function setHealthBar(barId, pct, status) {
+  const bar = document.getElementById(barId);
+  bar.style.width = pct + '%';
+  bar.className = 'health-indicator-fill fill-' + status;
 }
 
-// ===== ADD EXPENSE =====
-function addExpense() {
-  const name = document.getElementById('expName').value.trim();
-  const category = document.getElementById('expCategory').value;
-  const amount = parseFloat(document.getElementById('expAmount').value) || 0;
-  const date = document.getElementById('expDate').value || new Date().toLocaleDateString('ar-EG');
-  const notes = document.getElementById('expNotes').value.trim();
-
-  if (!name || !amount) { alert('اكتب البند والمبلغ'); return; }
-
-  state.expenses.push({ id: Date.now(), name, category, amount, date, notes });
-  save(); render();
-
-  document.getElementById('expName').value = '';
-  document.getElementById('expAmount').value = '';
-  document.getElementById('expNotes').value = '';
-}
-
-// ===== DELETE EXPENSE =====
-function deleteExpense(id) {
-  state.expenses = state.expenses.filter(e => e.id !== id);
-  save(); render();
-}
-
-// ===== SAVE INVENTORY =====
-function saveInventory() {
-  state.inventory.bottles      = parseFloat(document.getElementById('invBottlesInput').value) || 0;
-  state.inventory.pens         = parseFloat(document.getElementById('invPensInput').value) || 0;
-  state.inventory.stickers     = parseFloat(document.getElementById('invStickersInput').value) || 0;
-  state.inventory.alcohol      = parseFloat(document.getElementById('invAlcoholInput').value) || 0;
-  state.inventory.berryOil     = parseFloat(document.getElementById('invBerryOil').value) || 0;
-  state.inventory.velvetOil    = parseFloat(document.getElementById('invVelvetOil').value) || 0;
-  state.inventory.luxOil       = parseFloat(document.getElementById('invLuxOil').value) || 0;
-  state.inventory.preservatives= parseFloat(document.getElementById('invPreservatives').value) || 0;
-  save(); render();
-  alert('✅ تم حفظ المخزون');
-}
-
-// ===== CALCULATIONS =====
-function calcStats() {
-  const deliveredOrders = state.orders.filter(o => o.status === 'delivered');
-  const pendingOrders   = state.orders.filter(o => o.status === 'pending');
-
-  const revenue  = deliveredOrders.reduce((s, o) => s + o.price, 0);
-  const cogs     = deliveredOrders.reduce((s, o) => s + (COSTS[o.product] * o.qty), 0);
-  const opex     = state.expenses.reduce((s, e) => s + e.amount, 0);
-  const netProfit = revenue - cogs - opex;
-  const grossMargin = revenue > 0 ? ((revenue - cogs) / revenue * 100).toFixed(1) : 0;
-  const roi = opex + 2000 > 0 ? (netProfit / (opex + 2000) * 100).toFixed(1) : 0;
-
-  const scentCount = { berry: 0, velvet: 0, luxurious: 0, sample: 0 };
-  const scentRev   = { berry: 0, velvet: 0, luxurious: 0, sample: 0 };
-  deliveredOrders.forEach(o => {
-    scentCount[o.product] = (scentCount[o.product] || 0) + o.qty;
-    scentRev[o.product]   = (scentRev[o.product] || 0) + o.price;
-  });
-
-  const maxRev = Math.max(...Object.values(scentRev), 1);
-
-  return {
-    revenue, cogs, opex, netProfit, grossMargin, roi,
-    totalOrders: deliveredOrders.length,
-    pendingCount: pendingOrders.length,
-    liquidity: 2000 + revenue - opex,
-    scentCount, scentRev, maxRev
-  };
-}
-
-// ===== RENDER =====
-function render() {
-  const s = calcStats();
-
-  // Date
-  document.getElementById('currentDate').textContent =
-    new Date().toLocaleDateString('ar-EG', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-
-  // Overview stats
-  document.getElementById('totalRevenue').textContent  = s.revenue.toLocaleString();
-  document.getElementById('totalExpenses').textContent = s.opex.toLocaleString();
-  document.getElementById('netProfit').textContent     = s.netProfit.toLocaleString();
-  document.getElementById('totalOrders').textContent   = s.totalOrders;
-  document.getElementById('pendingOrders').textContent = s.pendingCount;
-  document.getElementById('liquidity').textContent     = s.liquidity.toLocaleString();
-
-  // Scent sales
-  document.getElementById('berrySales').textContent  = `${s.scentCount.berry} عبوة — ${s.scentRev.berry} جنيه`;
-  document.getElementById('velvetSales').textContent = `${s.scentCount.velvet} عبوة — ${s.scentRev.velvet} جنيه`;
-  document.getElementById('luxSales').textContent    = `${s.scentCount.luxurious} عبوة — ${s.scentRev.luxurious} جنيه`;
-  document.getElementById('sampleSales').textContent = `${s.scentCount.sample} باكدج — ${s.scentRev.sample} جنيه`;
-
-  document.getElementById('berryBar').style.width  = (s.scentRev.berry / s.maxRev * 100) + '%';
-  document.getElementById('velvetBar').style.width = (s.scentRev.velvet / s.maxRev * 100) + '%';
-  document.getElementById('luxBar').style.width    = (s.scentRev.luxurious / s.maxRev * 100) + '%';
-  document.getElementById('sampleBar').style.width = (s.scentRev.sample / s.maxRev * 100) + '%';
-
-  // Inventory overview
-  const inv = state.inventory;
-  document.getElementById('invBottles').textContent      = inv.bottles + ' عبوة';
-  document.getElementById('invPens').textContent         = inv.pens + ' قلم';
-  document.getElementById('invStickers').textContent     = inv.stickers + ' استيكر';
-  document.getElementById('invAlcohol').textContent      = inv.alcohol + ' لتر';
-  document.getElementById('invBottlesBadge').textContent = inv.bottles <= 10 ? '⚠️ منخفض' : '✅ كافي';
-  document.getElementById('invPensBadge').textContent    = inv.pens <= 15 ? '⚠️ منخفض' : '✅ كافي';
-  document.getElementById('invStickersBadge').textContent= inv.stickers <= 15 ? '⚠️ منخفض' : '✅ كافي';
-  document.getElementById('invAlcoholBadge').textContent = inv.alcohol <= 2 ? '⚠️ منخفض' : '✅ كافي';
-
-  // Low stock alert
+function renderAlerts(marginPct, coveragePct, breakEvenUnits, totalUnits) {
+  const sec = document.getElementById('alertsSection');
   const alerts = [];
-  if (inv.bottles <= 10)  alerts.push('البوتلات الفاضية');
-  if (inv.pens <= 15)     alerts.push('الأقلام العطرية');
-  if (inv.stickers <= 15) alerts.push('الاستيكرز');
-  if (inv.alcohol <= 2)   alerts.push('الكحول');
-  document.getElementById('low-stock-alert').innerHTML = alerts.length
-    ? `<div class="alert warning">⚠️ مخزون منخفض: ${alerts.join(' — ')}</div>`
-    : '';
-
-  // Production capacity
-  const canSplash = Math.min(inv.bottles, Math.floor(inv.alcohol / 0.24));
-  const canSample = Math.floor(inv.pens / 3);
-  document.getElementById('canProduceSplash').textContent = canSplash + ' عبوة';
-  document.getElementById('canProduceSample').textContent = canSample + ' باكدج';
-
-  // Fill inventory inputs
-  document.getElementById('invBottlesInput').value      = inv.bottles || '';
-  document.getElementById('invPensInput').value         = inv.pens || '';
-  document.getElementById('invStickersInput').value     = inv.stickers || '';
-  document.getElementById('invAlcoholInput').value      = inv.alcohol || '';
-  document.getElementById('invBerryOil').value          = inv.berryOil || '';
-  document.getElementById('invVelvetOil').value         = inv.velvetOil || '';
-  document.getElementById('invLuxOil').value            = inv.luxOil || '';
-  document.getElementById('invPreservatives').value     = inv.preservatives || '';
-
-  // Finance
-  document.getElementById('finRevenue').textContent     = s.revenue.toLocaleString();
-  document.getElementById('finCOGS').textContent        = s.cogs.toLocaleString();
-  document.getElementById('finGrossMargin').textContent = s.grossMargin + '%';
-  document.getElementById('finOpex').textContent        = s.opex.toLocaleString();
-  document.getElementById('finNet').textContent         = s.netProfit.toLocaleString();
-  document.getElementById('finNet').className           = 'stat-value ' + (s.netProfit >= 0 ? 'green' : 'red');
-  document.getElementById('finROI').textContent         = s.roi + '%';
-  document.getElementById('cashRevenue').textContent    = '+' + s.revenue.toLocaleString();
-  document.getElementById('cashExpenses').textContent   = '-' + s.opex.toLocaleString();
-  document.getElementById('cashCurrent').textContent    = s.liquidity.toLocaleString();
-
-  // Recent orders table (overview)
-  const recent = [...state.orders].reverse().slice(0, 5);
-  const recentTbl = document.getElementById('recentOrdersTable');
-  document.getElementById('lastOrdersCount').textContent = state.orders.length ? `(${state.orders.length})` : '';
-  recentTbl.innerHTML = recent.length ? recent.map((o, i) => `
-    <tr>
-      <td style="color:var(--text-muted)">${i + 1}</td>
-      <td style="font-weight:600">${o.name}</td>
-      <td><span class="badge ${o.product}">${PRODUCT_LABELS[o.product]}</span></td>
-      <td style="color:var(--green);font-weight:700">${o.price} ج</td>
-      <td><span class="badge ${o.status === 'delivered' ? 'delivered' : 'pending'}">${o.status === 'delivered' ? 'تم التسليم' : 'معلق'}</span></td>
-      <td style="color:var(--text-muted)">${o.date}</td>
-    </tr>`).join('') : '<tr><td colspan="6" class="empty">لا يوجد طلبات بعد</td></tr>';
-
-  // All orders table
-  const allTbl = document.getElementById('allOrdersTable');
-  document.getElementById('allOrdersCount').textContent = state.orders.length ? `(${state.orders.length})` : '';
-  allTbl.innerHTML = state.orders.length ? [...state.orders].reverse().map((o, i) => `
-    <tr>
-      <td style="color:var(--text-muted)">${i + 1}</td>
-      <td style="font-weight:600">${o.name}</td>
-      <td><span class="badge ${o.product}">${PRODUCT_LABELS[o.product]}</span></td>
-      <td>${o.qty}</td>
-      <td style="color:var(--green);font-weight:700">${o.price} ج</td>
-      <td style="color:var(--text-muted)">${o.source}</td>
-      <td><span class="badge ${o.status === 'delivered' ? 'delivered' : 'pending'}">${o.status === 'delivered' ? 'تم التسليم' : 'معلق'}</span></td>
-      <td style="color:var(--text-muted)">${o.date}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="deleteOrder(${o.id})">حذف</button></td>
-    </tr>`).join('') : '<tr><td colspan="9" class="empty">لا يوجد طلبات بعد</td></tr>';
-
-  // Expenses table
-  const expTbl = document.getElementById('expensesTable');
-  const totalExp = state.expenses.reduce((s, e) => s + e.amount, 0);
-  document.getElementById('expensesTotal').textContent = state.expenses.length ? `إجمالي: ${totalExp.toLocaleString()} جنيه` : '';
-  expTbl.innerHTML = state.expenses.length ? [...state.expenses].reverse().map((e, i) => `
-    <tr>
-      <td style="color:var(--text-muted)">${i + 1}</td>
-      <td style="font-weight:600">${e.name}</td>
-      <td><span class="badge sample">${CAT_LABELS[e.category]}</span></td>
-      <td style="color:var(--red);font-weight:700">${e.amount} ج</td>
-      <td style="color:var(--text-muted)">${e.date}</td>
-      <td style="color:var(--text-muted)">${e.notes || '—'}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="deleteExpense(${e.id})">حذف</button></td>
-    </tr>`).join('') : '<tr><td colspan="7" class="empty">لا يوجد مصاريف بعد</td></tr>';
-
-  // Auto-fill order price
-  document.getElementById('orderProduct').onchange = function() {
-    const p = this.value;
-    const qty = parseInt(document.getElementById('orderQty').value) || 1;
-    document.getElementById('orderPrice').value = PRICES[p] * qty;
-  };
-  document.getElementById('orderQty').oninput = function() {
-    const p = document.getElementById('orderProduct').value;
-    document.getElementById('orderPrice').value = PRICES[p] * (parseInt(this.value) || 1);
-  };
+  if (marginPct < 20 && marginPct > 0) alerts.push({ type: 'warning', msg: '⚠️ هامش الربح أقل من 20% — فكر في رفع السعر أو تخفيض تكلفة الخامات' });
+  if (coveragePct < 100 && coveragePct > 0) alerts.push({ type: 'danger', msg: '🔴 الإيرادات مش بتغطي التكاليف الكلية بعد — ركز على زيادة المبيعات' });
+  if (isFinite(breakEvenUnits) && totalUnits < breakEvenUnits) alerts.push({ type: 'warning', msg: `📊 محتاج ${breakEvenUnits - totalUnits} قطعة إضافية للوصول لنقطة التعادل` });
+  sec.innerHTML = alerts.map(a => `<div class="alert-box alert-${a.type}">${a.msg}</div>`).join('');
 }
 
-// ===== INIT =====
-load();
-render();
+// ══════════════════════════════════════════
+// SAVE SALE
+// ══════════════════════════════════════════
+async function saveSale() {
+  const date = document.getElementById('s-date').value;
+  const product = document.getElementById('s-product').value;
+  const qty = parseFloat(document.getElementById('s-qty').value);
+  const price = parseFloat(document.getElementById('s-price').value);
+  const channel = document.getElementById('s-channel').value;
+  const notes = document.getElementById('s-notes').value;
+
+  if (!date || !product || !qty || !price) {
+    showToast('❌ ملي كل الحقول المطلوبة', true); return;
+  }
+
+  const row = { date, product, qty, price, channel, notes, total: qty * price };
+  showLoading('جاري الحفظ...');
+  const res = await gsRequest('addSale', { row });
+  hideLoading();
+
+  // also save to local cache
+  const cache = JSON.parse(localStorage.getItem('beru_sales_cache') || '[]');
+  cache.push(row);
+  localStorage.setItem('beru_sales_cache', JSON.stringify(cache));
+
+  showToast(`✅ تم حفظ بيعة ${product} — ${qty} قطعة بـ ${fmt(qty*price)} جنيه`);
+  document.getElementById('s-qty').value = '';
+  document.getElementById('s-price').value = '';
+  document.getElementById('s-notes').value = '';
+  updateSaleCalc();
+}
+
+// Live calc for sales
+function updateSaleCalc() {
+  const qty = parseFloat(document.getElementById('s-qty').value) || 0;
+  const price = parseFloat(document.getElementById('s-price').value) || 0;
+  const unitCost = calcUnitCostFromFormula(100) + parseFloat(config.packaging || 0);
+  const total = qty * price;
+  const cost = qty * unitCost;
+  const profit = total - cost;
+
+  document.getElementById('calc-total').textContent = fmt(total);
+  document.getElementById('calc-cost').textContent = fmt(cost);
+  const profitEl = document.getElementById('calc-profit');
+  profitEl.textContent = fmt(profit);
+  profitEl.style.color = profit >= 0 ? 'var(--gold)' : '#ff6b6b';
+}
+['s-qty','s-price'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', updateSaleCalc);
+});
+
+// ══════════════════════════════════════════
+// COST CALC
+// ══════════════════════════════════════════
+function calcUnitCostFromFormula(bottleMl) {
+  let cost = 0;
+  FORMULA.forEach(ing => {
+    const amountMl = (ing.pct / 100) * bottleMl;
+    const pricePerMl = parseFloat(ingredientCosts[ing.costKey] || 0);
+    cost += amountMl * pricePerMl;
+  });
+  return cost;
+}
+
+function renderIngredients() {
+  const batchSize = parseFloat(document.getElementById('batch-size').value) || 1000;
+  const bottleSize = parseFloat(document.getElementById('bottle-size').value) || 100;
+
+  const tbody = FORMULA.map((ing, i) => {
+    const amountMl = (ing.pct / 100) * batchSize;
+    const costPerMl = parseFloat(ingredientCosts[ing.costKey] || 0);
+    const totalCost = amountMl * costPerMl;
+    const roleColors = {
+      'active ingredient': '#e91e8c',
+      'surfactant': '#3498db',
+      'humectant': '#2ecc71',
+      'antibacterial': '#e74c3c',
+      'antifungal': '#9b59b6',
+      'filler': 'var(--green)',
+      'colour': '#e67e22'
+    };
+    const roleColor = roleColors[ing.role] || '#666';
+    return `
+      <div class="ingredient-row">
+        <div class="ingredient-name">${ing.name}</div>
+        <div class="ingredient-pct">${ing.pct}%</div>
+        <div style="font-size:12px;color:var(--text-muted);width:70px;">${amountMl.toFixed(1)} مل</div>
+        <div style="display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;color:white;background:${roleColor};width:120px;text-align:center;">${ing.role}</div>
+        <div class="ingredient-cost">
+          <label style="font-size:11px;color:var(--text-muted);white-space:nowrap;">جنيه/مل:</label>
+          <input type="number" style="width:85px;" value="${ingredientCosts[ing.costKey] || ''}" 
+                 placeholder="0.000" step="0.001" min="0"
+                 onchange="updateIngCost('${ing.costKey}', this.value)">
+        </div>
+        <div class="cost-badge">${fmt(totalCost)} ج</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('ingredientsTable').innerHTML = `<div style="background:var(--off-white);border-radius:12px;padding:16px;">${tbody}</div>`;
+  calcBatchCost();
+}
+
+function updateIngCost(key, val) {
+  ingredientCosts[key] = parseFloat(val) || 0;
+  localStorage.setItem('beru_ingredient_costs', JSON.stringify(ingredientCosts));
+  calcBatchCost();
+}
+
+function calcBatchCost() {
+  const batchSize = parseFloat(document.getElementById('batch-size').value) || 1000;
+  const bottleSize = parseFloat(document.getElementById('bottle-size').value) || 100;
+  const sellingPrice = parseFloat(document.getElementById('selling-price').value) || 0;
+  const packaging = parseFloat(config.packaging || 0);
+
+  let totalCost = 0;
+  FORMULA.forEach(ing => {
+    const amountMl = (ing.pct / 100) * batchSize;
+    totalCost += amountMl * (parseFloat(ingredientCosts[ing.costKey] || 0));
+  });
+
+  const bottles = Math.floor(batchSize / bottleSize);
+  const bottleCostRaw = bottles > 0 ? totalCost / bottles : 0;
+  const bottleCost = bottleCostRaw + packaging;
+  const bottleProfit = sellingPrice - bottleCost;
+  const marginPct = sellingPrice > 0 ? (bottleProfit / sellingPrice * 100) : 0;
+
+  document.getElementById('batch-total-cost').textContent = fmt(totalCost);
+  document.getElementById('batch-bottles').textContent = bottles;
+  document.getElementById('bottle-cost').textContent = fmt(bottleCost);
+  document.getElementById('bottle-profit').textContent = fmt(bottleProfit);
+  document.getElementById('profit-margin-pct').textContent = marginPct.toFixed(1) + '%';
+  document.getElementById('profit-margin-pct').style.color = marginPct >= 30 ? 'var(--gold)' : marginPct >= 15 ? '#ffd700' : '#ff6b6b';
+
+  // re-render ingredient costs
+  renderIngredients();
+}
+
+async function saveCostToSheets() {
+  const batchSize = parseFloat(document.getElementById('batch-size').value) || 1000;
+  const bottleSize = parseFloat(document.getElementById('bottle-size').value) || 100;
+  const bottles = Math.floor(batchSize / bottleSize);
+  const unitCost = calcUnitCostFromFormula(bottleSize);
+  
+  showLoading('جاري حفظ التكلفة...');
+  await gsRequest('addCost', {
+    row: {
+      date: new Date().toISOString().split('T')[0],
+      batchSize, bottleSize, bottles,
+      unitCost: fmt(unitCost),
+      ingredients: ingredientCosts
+    }
+  });
+  hideLoading();
+  showToast('✅ تم حفظ بيانات التكلفة على Sheets');
+}
+
+// ══════════════════════════════════════════
+// MATERIALS
+// ══════════════════════════════════════════
+async function loadMaterials() {
+  const res = await gsRequest('getMaterials');
+  materialsData = (res && res.data) ? res.data : JSON.parse(localStorage.getItem('beru_materials') || '[]');
+  renderMaterials();
+}
+
+function renderMaterials() {
+  const tbody = document.getElementById('materialsTable');
+  if (materialsData.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:24px;">لا توجد مواد بعد</td></tr>';
+    return;
+  }
+  tbody.innerHTML = materialsData.map((m, i) => {
+    const name = m.name || m[0] || '—';
+    const code = m.code || m[1] || '—';
+    const role = m.role || m[2] || '—';
+    const unit = m.unit || m[3] || 'مل';
+    const price = parseFloat(m.price || m[4]) || 0;
+    const qty = parseFloat(m.qty || m[5]) || 0;
+    const perUnit = qty > 0 ? (price / qty).toFixed(4) : '—';
+    return `<tr>
+      <td><strong>${name}</strong></td>
+      <td><span class="badge badge-gold">${code}</span></td>
+      <td><span class="badge badge-green">${role}</span></td>
+      <td>${unit}</td>
+      <td>${fmt(price)} ج</td>
+      <td>${qty}</td>
+      <td>${perUnit} ج/${unit}</td>
+      <td><button class="btn btn-danger" onclick="deleteMaterial(${i})">حذف</button></td>
+    </tr>`;
+  }).join('');
+}
+
+async function saveMaterial() {
+  const name = document.getElementById('m-name').value.trim();
+  const code = document.getElementById('m-code').value.trim();
+  const unit = document.getElementById('m-unit').value;
+  const price = parseFloat(document.getElementById('m-price').value) || 0;
+  const qty = parseFloat(document.getElementById('m-qty').value) || 0;
+  const role = document.getElementById('m-role').value;
+
+  if (!name) { showToast('❌ اكتب اسم المادة', true); return; }
+
+  const mat = { name, code, role, unit, price, qty };
+  materialsData.push(mat);
+  localStorage.setItem('beru_materials', JSON.stringify(materialsData));
+
+  showLoading('جاري الحفظ...');
+  await gsRequest('addMaterial', { row: mat });
+  hideLoading();
+
+  renderMaterials();
+  showToast(`✅ تم إضافة ${name} بنجاح`);
+  ['m-name','m-code','m-price','m-qty'].forEach(id => document.getElementById(id).value = '');
+}
+
+async function deleteMaterial(i) {
+  if (!confirm('مسح المادة دي؟')) return;
+  const mat = materialsData[i];
+  materialsData.splice(i, 1);
+  localStorage.setItem('beru_materials', JSON.stringify(materialsData));
+  await gsRequest('deleteMaterial', { name: mat.name || mat[0] });
+  renderMaterials();
+  showToast('🗑️ تم المسح');
+}
+
+// ══════════════════════════════════════════
+// HISTORY
+// ══════════════════════════════════════════
+async function loadHistory() {
+  const res = await gsRequest('getSales');
+  allHistory = (res && res.data) ? res.data : JSON.parse(localStorage.getItem('beru_sales_cache') || '[]');
+  filterHistory();
+}
+
+function filterHistory() {
+  const filter = document.getElementById('filter-product').value;
+  const rows = filter ? allHistory.filter(r => (r.product || r[1]) === filter) : allHistory;
+  const tbody = document.getElementById('historyTable');
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px;">لا توجد بيانات</td></tr>';
+    return;
+  }
+  tbody.innerHTML = [...rows].reverse().map(r => {
+    const date = r.date || r[0] || '—';
+    const product = r.product || r[1] || '—';
+    const qty = r.qty || r[2] || 0;
+    const price = r.price || r[3] || 0;
+    const channel = r.channel || r[4] || '—';
+    const notes = r.notes || r[5] || '';
+    const total = parseFloat(qty) * parseFloat(price);
+    const dotClass = product === 'Berry' ? 'dot-berry' : product === 'Velvet' ? 'dot-velvet' : 'dot-luxurious';
+    return `<tr>
+      <td>${date}</td>
+      <td><span class="product-dot ${dotClass}"></span>${product}</td>
+      <td>${qty}</td>
+      <td>${fmt(price)} ج</td>
+      <td style="font-weight:700;color:var(--green)">${fmt(total)} ج</td>
+      <td><span class="badge badge-green">${channel}</span></td>
+      <td style="color:var(--text-muted);font-size:12px;">${notes}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════
+function loadSettings() {
+  document.getElementById('gs-url').value = config.gsUrl || '';
+  document.getElementById('fixed-overhead').value = config.overhead || '';
+  document.getElementById('fixed-marketing').value = config.marketing || '';
+  document.getElementById('fixed-packaging').value = config.packaging || '';
+}
+
+function saveSettings() {
+  config.gsUrl = document.getElementById('gs-url').value.trim() || DEFAULT_GS_URL;
+  config.overhead = parseFloat(document.getElementById('fixed-overhead').value) || 0;
+  config.marketing = parseFloat(document.getElementById('fixed-marketing').value) || 0;
+  config.packaging = parseFloat(document.getElementById('fixed-packaging').value) || 0;
+  localStorage.setItem('beru_config', JSON.stringify(config));
+  showToast('✅ تم حفظ الإعدادات');
+}
+
+async function testConnection() {
+  showLoading('جاري اختبار الاتصال...');
+  const res = await gsRequest('ping');
+  hideLoading();
+  if (res) {
+    showToast('✅ الاتصال شغال — Google Sheets متصل');
+    document.getElementById('syncDot').style.background = '#2ecc71';
+    document.getElementById('syncStatus').textContent = 'متصل بـ Google Sheets';
+  } else {
+    showToast('❌ فيه مشكلة في الاتصال', true);
+    document.getElementById('syncDot').style.background = '#e74c3c';
+    document.getElementById('syncStatus').textContent = 'غير متصل';
+  }
+}
+
+// ══════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════
+function fmt(n) {
+  return parseFloat(n || 0).toLocaleString('ar-EG', { maximumFractionDigits: 2 });
+}
+function showToast(msg, err = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (err ? ' error' : '') + ' show';
+  setTimeout(() => t.className = 'toast', 3500);
+}
+function showLoading(msg = 'جاري...') {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+  document.getElementById('loadingMsg').textContent = msg;
+}
+function hideLoading() {
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // Set today's date
+  document.getElementById('s-date').value = new Date().toISOString().split('T')[0];
+  loadSettings();
+  loadData();
+  loadMaterials();
+});
 </script>
 </body>
 </html>
